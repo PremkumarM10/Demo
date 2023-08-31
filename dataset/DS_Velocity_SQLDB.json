@@ -1,0 +1,20 @@
+{
+	"name": "DS_Velocity_SQLDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Self_Host_LS",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Velocity"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

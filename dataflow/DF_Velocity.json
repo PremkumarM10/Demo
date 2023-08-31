@@ -1,0 +1,1003 @@
+{
+	"name": "DF_Velocity",
+	"properties": {
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_FMA_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_VMM_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source4"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_RE_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source5"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_DESM_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source6"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_EVM_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source7"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_VMN_Source",
+						"type": "DatasetReference"
+					},
+					"name": "source8"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Velocity_Sink_DS",
+						"type": "DatasetReference"
+					},
+					"name": "sink7"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten4"
+				},
+				{
+					"name": "flatten5"
+				},
+				{
+					"name": "unpivot3"
+				},
+				{
+					"name": "aggregate3"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "flatten6"
+				},
+				{
+					"name": "unpivot4"
+				},
+				{
+					"name": "aggregate4"
+				},
+				{
+					"name": "select4"
+				},
+				{
+					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "select5"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten8"
+				},
+				{
+					"name": "select6"
+				},
+				{
+					"name": "flatten9"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "flatten10"
+				},
+				{
+					"name": "unpivot6"
+				},
+				{
+					"name": "aggregate6"
+				},
+				{
+					"name": "flatten11"
+				},
+				{
+					"name": "select7"
+				},
+				{
+					"name": "join5"
+				},
+				{
+					"name": "flatten12"
+				},
+				{
+					"name": "unpivot7"
+				},
+				{
+					"name": "aggregate7"
+				},
+				{
+					"name": "select8"
+				},
+				{
+					"name": "join6"
+				},
+				{
+					"name": "select9"
+				},
+				{
+					"name": "select10"
+				},
+				{
+					"name": "join7"
+				},
+				{
+					"name": "flatten13"
+				},
+				{
+					"name": "unpivot8"
+				},
+				{
+					"name": "aggregate8"
+				},
+				{
+					"name": "select11"
+				},
+				{
+					"name": "join8"
+				},
+				{
+					"name": "select12"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "flatten14"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "flatten15"
+				},
+				{
+					"name": "unpivot9"
+				},
+				{
+					"name": "aggregate9"
+				},
+				{
+					"name": "select13"
+				},
+				{
+					"name": "flatten16"
+				},
+				{
+					"name": "unpivot10"
+				},
+				{
+					"name": "aggregate10"
+				},
+				{
+					"name": "select14"
+				},
+				{
+					"name": "join9"
+				},
+				{
+					"name": "join10"
+				},
+				{
+					"name": "select15"
+				},
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "cast2"
+				},
+				{
+					"name": "cast3"
+				},
+				{
+					"name": "flatten17"
+				},
+				{
+					"name": "derivedColumn5"
+				},
+				{
+					"name": "flatten18"
+				},
+				{
+					"name": "unpivot11"
+				},
+				{
+					"name": "aggregate11"
+				},
+				{
+					"name": "select16"
+				},
+				{
+					"name": "flatten19"
+				},
+				{
+					"name": "unpivot12"
+				},
+				{
+					"name": "aggregate12"
+				},
+				{
+					"name": "select17"
+				},
+				{
+					"name": "join11"
+				},
+				{
+					"name": "join12"
+				},
+				{
+					"name": "select18"
+				},
+				{
+					"name": "cast4"
+				},
+				{
+					"name": "flatten20"
+				},
+				{
+					"name": "unpivot13"
+				},
+				{
+					"name": "aggregate13"
+				},
+				{
+					"name": "select19"
+				},
+				{
+					"name": "flatten21"
+				},
+				{
+					"name": "derivedColumn6"
+				},
+				{
+					"name": "flatten22"
+				},
+				{
+					"name": "unpivot14"
+				},
+				{
+					"name": "aggregate14"
+				},
+				{
+					"name": "select20"
+				},
+				{
+					"name": "join13"
+				},
+				{
+					"name": "join14"
+				},
+				{
+					"name": "select21"
+				},
+				{
+					"name": "cast5"
+				},
+				{
+					"name": "cast6"
+				},
+				{
+					"name": "union2"
+				},
+				{
+					"name": "union3"
+				},
+				{
+					"name": "union4"
+				},
+				{
+					"name": "union5"
+				},
+				{
+					"name": "union6"
+				},
+				{
+					"name": "unpivot15"
+				},
+				{
+					"name": "aggregate15"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2968} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3043} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3065} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3108} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3148} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3191} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3233} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> source2",
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2996} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3028} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3066} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3114} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3143} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3185} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3231} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source4",
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2932} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string)[]), {2962} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {2997} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3037} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3101} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3106} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3110} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source5",
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2987} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3019} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3055} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3109} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3118} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3142} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3194} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source6",
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2972} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3001} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3041} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3073} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3119} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[]), {3120} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[]), {3199} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source7",
+				"source(output(",
+				"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+				"          velocityStatEntries as ({2838} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {2840} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3002} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3051} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3104} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3123} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3165} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source8",
+				"source2 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          Id = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence,",
+				"          Date = ADFWebActivityResponseHeaders.Date",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten4",
+				"source2 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2968} = velocityStatEntries.{2968}.estimated.value,",
+				"          {3043} = velocityStatEntries.{3043}.estimated.value,",
+				"          {3065} = velocityStatEntries.{3065}.estimated.value,",
+				"          {3108} = velocityStatEntries.{3108}.estimated.value,",
+				"          {3148} = velocityStatEntries.{3148}.estimated.value,",
+				"          {3191} = velocityStatEntries.{3191}.estimated.value,",
+				"          {3233} = velocityStatEntries.{3233}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten5",
+				"flatten5 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot3",
+				"unpivot3 aggregate(groupBy(new),",
+				"     each(match(name!=\"new\"), $$ = first($$))) ~> aggregate3",
+				"aggregate3 select(mapColumn(",
+				"          EstimatedValue = new,",
+				"          sprintid = unpivot",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"source2 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2968} = velocityStatEntries.{2968}.completed.value,",
+				"          {3043} = velocityStatEntries.{3043}.completed.value,",
+				"          {3065} = velocityStatEntries.{3065}.completed.value,",
+				"          {3108} = velocityStatEntries.{3108}.completed.value,",
+				"          {3148} = velocityStatEntries.{3148}.completed.value,",
+				"          {3191} = velocityStatEntries.{3191}.completed.value,",
+				"          {3233} = velocityStatEntries.{3233}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten6",
+				"flatten6 unpivot(output(",
+				"          unpivot as decimal(10,0),",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot4",
+				"unpivot4 aggregate(groupBy(new),",
+				"     each(match(name!=\"new\"), $$ = first($$))) ~> aggregate4",
+				"aggregate4 select(mapColumn(",
+				"          CompletedValue = new,",
+				"          ID = unpivot",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select4",
+				"select4, select3 join(ID == sprintid,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join3",
+				"join3, derivedColumn1 join(select4@ID == flatten4@Id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4 select(mapColumn(",
+				"          Sprintid = sprintid,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select5",
+				"flatten4 derive(ProjectKey = substring(SprintName, 1,4)) ~> derivedColumn1",
+				"source4 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2996} = velocityStatEntries.{2996}.completed.value,",
+				"          {3028} = velocityStatEntries.{3028}.completed.value,",
+				"          {3066} = velocityStatEntries.{3066}.completed.value,",
+				"          {3114} = velocityStatEntries.{3114}.completed.value,",
+				"          {3143} = velocityStatEntries.{3143}.completed.value,",
+				"          {3185} = velocityStatEntries.{3185}.completed.value,",
+				"          {3231} = velocityStatEntries.{3231}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten8",
+				"aggregate15 select(mapColumn(",
+				"          CompletedValue = new,",
+				"          ID = unpivot",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select6",
+				"source5 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          Id = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten9",
+				"flatten9 derive(ProjectKey = \"RE\") ~> derivedColumn2",
+				"source5 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2932} = velocityStatEntries.{2932}.completed.value,",
+				"          {2962} = velocityStatEntries.{2962}.completed.value,",
+				"          {2997} = velocityStatEntries.{2997}.completed.value,",
+				"          {3037} = velocityStatEntries.{3037}.completed.value,",
+				"          {3101} = velocityStatEntries.{3101}.completed.value,",
+				"          {3106} = velocityStatEntries.{3106}.completed.value,",
+				"          {3110} = velocityStatEntries.{3110}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten10",
+				"flatten10 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot6",
+				"unpivot6 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate6",
+				"source4 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten11",
+				"aggregate6 select(mapColumn(",
+				"          Id = unpivot,",
+				"          CompletedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select7",
+				"derivedColumn2, select7 join(flatten9@Id == select7@Id,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join5",
+				"source5 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2932} = velocityStatEntries.{2932}.estimated.value,",
+				"          {2962} = velocityStatEntries.{2962}.estimated.value,",
+				"          {2997} = velocityStatEntries.{2997}.estimated.value,",
+				"          {3037} = velocityStatEntries.{3037}.estimated.value,",
+				"          {3101} = velocityStatEntries.{3101}.estimated.value,",
+				"          {3106} = velocityStatEntries.{3106}.estimated.value,",
+				"          {3110} = velocityStatEntries.{3110}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten12",
+				"flatten12 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot7",
+				"unpivot7 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate7",
+				"aggregate7 select(mapColumn(",
+				"          SprintId = unpivot,",
+				"          EstimatedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select8",
+				"select8, select9 join(SprintId == Id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
+				"join5 select(mapColumn(",
+				"          Id = flatten9@Id,",
+				"          SprintName,",
+				"          SprintSequence,",
+				"          ProjectKey,",
+				"          Id = select7@Id,",
+				"          CompletedValue",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select9",
+				"join6 select(mapColumn(",
+				"          Sprintid = SprintId,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select10",
+				"derivedColumn3, select6 join(flatten11@id == select6@ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join7",
+				"source4 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2996} = velocityStatEntries.{2996}.estimated.value,",
+				"          {3028} = velocityStatEntries.{3028}.estimated.value,",
+				"          {3066} = velocityStatEntries.{3066}.estimated.value,",
+				"          {3114} = velocityStatEntries.{3114}.estimated.value,",
+				"          {3143} = velocityStatEntries.{3143}.estimated.value,",
+				"          {3185} = velocityStatEntries.{3185}.estimated.value,",
+				"          {3231} = velocityStatEntries.{3231}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten13",
+				"flatten13 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot8",
+				"unpivot8 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate8",
+				"aggregate8 select(mapColumn(",
+				"          SprintId = unpivot,",
+				"          EstimatedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select11",
+				"select11, join7 join(SprintId == select6@ID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join8",
+				"join8 select(mapColumn(",
+				"          Sprintid = SprintId,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select12",
+				"flatten11 derive(ProjectKey = \"VMM\") ~> derivedColumn3",
+				"source6 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          SprintId = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten14",
+				"flatten14 derive(ProjectKey = substring(SprintName,1,4)) ~> derivedColumn4",
+				"source6 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2987} = velocityStatEntries.{2987}.completed.value,",
+				"          {3019} = velocityStatEntries.{3019}.completed.value,",
+				"          {3055} = velocityStatEntries.{3055}.completed.value,",
+				"          {3109} = velocityStatEntries.{3109}.completed.value,",
+				"          {3118} = velocityStatEntries.{3118}.completed.value,",
+				"          {3142} = velocityStatEntries.{3142}.completed.value,",
+				"          {3194} = velocityStatEntries.{3194}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten15",
+				"flatten15 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot9",
+				"unpivot9 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate9",
+				"aggregate9 select(mapColumn(",
+				"          Id = unpivot,",
+				"          CompletedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select13",
+				"source6 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2987} = velocityStatEntries.{2987}.estimated.value,",
+				"          {3019} = velocityStatEntries.{3019}.estimated.value,",
+				"          {3055} = velocityStatEntries.{3055}.estimated.value,",
+				"          {3109} = velocityStatEntries.{3109}.estimated.value,",
+				"          {3118} = velocityStatEntries.{3118}.estimated.value,",
+				"          {3142} = velocityStatEntries.{3142}.estimated.value,",
+				"          {3194} = velocityStatEntries.{3194}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten16",
+				"flatten16 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot10",
+				"unpivot10 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate10",
+				"aggregate10 select(mapColumn(",
+				"          ID = unpivot,",
+				"          EstimatedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select14",
+				"select14, select13 join(select14@ID == select13@Id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join9",
+				"join9, derivedColumn4 join(select14@ID == SprintId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join10",
+				"join10 select(mapColumn(",
+				"          Sprintid = SprintId,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select15",
+				"select15 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"select12 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast2",
+				"select10 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast3",
+				"source7 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          SprintId = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten17",
+				"flatten17 derive(ProjectKey = \"EVM\") ~> derivedColumn5",
+				"source7 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          Id = sprints.id,",
+				"          {2972} = velocityStatEntries.{2972}.estimated.value,",
+				"          {3001} = velocityStatEntries.{3001}.estimated.value,",
+				"          {3041} = velocityStatEntries.{3041}.estimated.value,",
+				"          {3073} = velocityStatEntries.{3073}.estimated.value,",
+				"          {3119} = velocityStatEntries.{3119}.estimated.value,",
+				"          {3120} = velocityStatEntries.{3120}.estimated.value,",
+				"          {3199} = velocityStatEntries.{3199}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten18",
+				"flatten18 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(Id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot11",
+				"unpivot11 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate11",
+				"aggregate11 select(mapColumn(",
+				"          SprintId = unpivot,",
+				"          EstimatedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select16",
+				"source7 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2972} = velocityStatEntries.{2972}.completed.value,",
+				"          {3001} = velocityStatEntries.{3001}.completed.value,",
+				"          {3041} = velocityStatEntries.{3041}.completed.value,",
+				"          {3073} = velocityStatEntries.{3073}.completed.value,",
+				"          {3119} = velocityStatEntries.{3119}.completed.value,",
+				"          {3120} = velocityStatEntries.{3120}.completed.value,",
+				"          {3199} = velocityStatEntries.{3199}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten19",
+				"flatten19 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot12",
+				"unpivot12 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate12",
+				"aggregate12 select(mapColumn(",
+				"          SprintId = unpivot,",
+				"          CompletedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select17",
+				"select17, select16 join(select17@SprintId == select16@SprintId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join11",
+				"join11, derivedColumn5 join(select17@SprintId == flatten17@SprintId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join12",
+				"join12 select(mapColumn(",
+				"          Sprintid = select17@SprintId,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select18",
+				"select18 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast4",
+				"source8 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2838} = velocityStatEntries.{2838}.completed.value,",
+				"          {2840} = velocityStatEntries.{2840}.completed.value,",
+				"          {3002} = velocityStatEntries.{3002}.completed.value,",
+				"          {3051} = velocityStatEntries.{3051}.completed.value,",
+				"          {3104} = velocityStatEntries.{3104}.completed.value,",
+				"          {3123} = velocityStatEntries.{3123}.completed.value,",
+				"          {3165} = velocityStatEntries.{3165}.completed.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten20",
+				"flatten20 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot13",
+				"unpivot13 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate13",
+				"aggregate13 select(mapColumn(",
+				"          SprintId = unpivot,",
+				"          CompletedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select19",
+				"source8 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          SprintId = sprints.id,",
+				"          SprintName = sprints.name,",
+				"          SprintSequence = sprints.sequence",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten21",
+				"flatten21 derive(ProjectKey = \"VMN\") ~> derivedColumn6",
+				"source8 foldDown(unroll(sprints, sprints),",
+				"     mapColumn(",
+				"          id = sprints.id,",
+				"          {2838} = velocityStatEntries.{2838}.estimated.value,",
+				"          {2840} = velocityStatEntries.{2840}.estimated.value,",
+				"          {3002} = velocityStatEntries.{3002}.estimated.value,",
+				"          {3051} = velocityStatEntries.{3051}.estimated.value,",
+				"          {3104} = velocityStatEntries.{3104}.estimated.value,",
+				"          {3123} = velocityStatEntries.{3123}.estimated.value,",
+				"          {3165} = velocityStatEntries.{3165}.estimated.value",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten22",
+				"flatten22 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot14",
+				"unpivot14 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate14",
+				"aggregate14 select(mapColumn(",
+				"          id = unpivot,",
+				"          EstimatedValue = new",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select20",
+				"select20, derivedColumn6 join(id == SprintId,",
+				"     joinType:'left',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join13",
+				"join13, select19 join(id == select19@SprintId,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join14",
+				"join14 select(mapColumn(",
+				"          Sprintid = id,",
+				"          CompletedValue,",
+				"          EstimatedValue,",
+				"          SprintSequence,",
+				"          SprintName,",
+				"          ProjectKey",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select21",
+				"select21 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast5",
+				"select5 cast(output(",
+				"          Sprintid as string,",
+				"          CompletedValue as string,",
+				"          EstimatedValue as string,",
+				"          SprintSequence as string,",
+				"          SprintName as string,",
+				"          ProjectKey as string",
+				"     ),",
+				"     errors: true) ~> cast6",
+				"cast4, cast3 union(byName: true)~> union2",
+				"cast1, cast5 union(byName: true)~> union3",
+				"union2, cast2 union(byName: true)~> union4",
+				"union4, union3 union(byName: true)~> union5",
+				"union5, cast6 union(byName: true)~> union6",
+				"flatten8 unpivot(output(",
+				"          unpivot as double,",
+				"          new as double",
+				"     ),",
+				"     ungroupBy(id),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot15",
+				"unpivot15 aggregate(groupBy(unpivot),",
+				"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate15",
+				"union6 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     partitionFileNames:['velocity.parquet'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink7"
+			]
+		}
+	}
+}

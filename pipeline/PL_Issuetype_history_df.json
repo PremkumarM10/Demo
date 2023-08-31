@@ -1,0 +1,185 @@
+{
+	"name": "PL_Issuetype_history_df",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Data flow1",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "DF_Issuetype_History",
+									"type": "DataFlowReference",
+									"parameters": {
+										"sink_filename": {
+											"value": "'@{item().IssueType_Sink_FileName}'",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"source1": {
+											"scr_filename": {
+												"value": "@item().IssueFileName",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@pipeline().parameters.Query",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_Issuetype_History_top_100",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false,
+							"prefix": {
+								"value": "@{pipeline().parameters.Prefix_FileName}",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_Issuetype_History_Merge_CSV_Files",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_Issuetype_histaory_final_Parquet_File",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"Query": {
+				"type": "string",
+				"defaultValue": "select * from(    select rank () over( order by [key])  as RN, [Key] as IssueKey,'IssueHistory_'+ [Key] +'.json' as IssueFileName,'https://safefleet.atlassian.net/rest/api/3/issue/'+[Key]+'/changelog' as RestApi ,  'https://databistrg.blob.core.windows.net/test/'+'IssueHistory_'+ [Key] +'.json'+'?sp=racw&st=2023-06-29T06:17:16Z&se=2025-05-15T14:17:16Z&spr=https&sv=2022-11-02&sr=c&sig=%2B7kryfFPMVsgx4FvFpZ%2BRkMZ0Y9Q7ob9MfsTS745CP8%3D' as BlobRestApi, 'IssueHistory_'+ [Key] +'.csv' as IssueType_Sink_FileName   from Bug where Resolution_Date>='2023-01-01' and Resolution_Date<='2023-06-30' and Issue_Name in ('bug','improvement','story')    ) as A where RN >= 801 AND RN <= 1000"
+			},
+			"Prefix_FileName": {
+				"type": "string",
+				"defaultValue": "output/IssueHistory"
+			}
+		},
+		"variables": {
+			"jsonfilename": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Issuetype_History"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-11T09:15:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

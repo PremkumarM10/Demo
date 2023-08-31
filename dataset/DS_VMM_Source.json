@@ -1,0 +1,581 @@
+{
+	"name": "DS_VMM_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "VMM.json",
+				"folderPath": "Velocity",
+				"container": "monthlymetrics"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"sprints": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer"
+							},
+							"sequence": {
+								"type": "integer"
+							},
+							"name": {
+								"type": "string"
+							},
+							"state": {
+								"type": "string"
+							},
+							"linkedPagesCount": {
+								"type": "integer"
+							},
+							"goal": {
+								"type": "string"
+							},
+							"sprintVersion": {
+								"type": "integer"
+							}
+						}
+					}
+				},
+				"velocityStatEntries": {
+					"type": "object",
+					"properties": {
+						"2996": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3028": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3066": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3114": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3143": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3185": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						},
+						"3231": {
+							"type": "object",
+							"properties": {
+								"estimated": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"completed": {
+									"type": "object",
+									"properties": {
+										"value": {
+											"type": "number"
+										},
+										"text": {
+											"type": "string"
+										}
+									}
+								},
+								"allConsideredIssueKeys": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"estimatedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								},
+								"completedEntries": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"issueKey": {
+												"type": "string"
+											},
+											"value": {
+												"type": "number"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"ADFWebActivityResponseHeaders": {
+					"type": "object",
+					"properties": {
+						"Timing-Allow-Origin": {
+							"type": "string"
+						},
+						"X-Arequestid": {
+							"type": "string"
+						},
+						"X-Aaccountid": {
+							"type": "string"
+						},
+						"Vary": {
+							"type": "string"
+						},
+						"X-Content-Type-Options": {
+							"type": "string"
+						},
+						"X-Xss-Protection": {
+							"type": "string"
+						},
+						"Atl-Traceid": {
+							"type": "string"
+						},
+						"Report-To": {
+							"type": "string"
+						},
+						"Nel": {
+							"type": "string"
+						},
+						"Strict-Transport-Security": {
+							"type": "string"
+						},
+						"Transfer-Encoding": {
+							"type": "string"
+						},
+						"Cache-Control": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"Set-Cookie": {
+							"type": "string"
+						},
+						"Server": {
+							"type": "string"
+						},
+						"Content-Type": {
+							"type": "string"
+						}
+					}
+				},
+				"effectiveIntegrationRuntime": {
+					"type": "string"
+				},
+				"executionDuration": {
+					"type": "integer"
+				},
+				"durationInQueue": {
+					"type": "object",
+					"properties": {
+						"integrationRuntimeQueue": {
+							"type": "integer"
+						}
+					}
+				},
+				"billingReference": {
+					"type": "object",
+					"properties": {
+						"activityType": {
+							"type": "string"
+						},
+						"billableDuration": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"meterType": {
+										"type": "string"
+									},
+									"duration": {
+										"type": "number"
+									},
+									"unit": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,74 @@
+{
+	"name": "DF_Project",
+	"properties": {
+		"folder": {
+			"name": "Monthly_Metrics_V1/Project"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Project_Source_DF",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Project_Sink",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "derivedColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ADFWebActivityResponseHeaders as ({Atl-Traceid} as string, {Cache-Control} as string, {Content-Type} as string, Date as string, Nel as string, {Report-To} as string, Server as string, {Set-Cookie} as string, {Strict-Transport-Security} as string, {Timing-Allow-Origin} as string, {Transfer-Encoding} as string, Vary as string, {X-Aaccountid} as string, {X-Arequestid} as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string),",
+				"          billingReference as (activityType as string, billableDuration as (duration as double, meterType as string, unit as string)[]),",
+				"          durationInQueue as (integrationRuntimeQueue as boolean),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as boolean,",
+				"          isLast as boolean,",
+				"          maxResults as short,",
+				"          self as string,",
+				"          startAt as boolean,",
+				"          total as short,",
+				"          values as (avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), entityId as string, expand as string, id as short, isPrivate as boolean, key as string, lead as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, self as string), name as string, projectCategory as (description as string, id as short, name as string, self as string), projectTypeKey as string, self as string, simplified as boolean, style as string, uuid as string)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 foldDown(unroll(values),",
+				"     mapColumn(",
+				"          Project_Name = values.name,",
+				"          Project_Key = values.key,",
+				"          Category = values.projectCategory.name,",
+				"          Lead = values.lead.displayName,",
+				"          simplified = values.simplified",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 derive(Type = iif(toString(simplified) == 'true', 'Team-managed software', iif(toString(simplified) == 'false', 'Company-managed software', toString(simplified)))) ~> derivedColumn2",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     partitionFileNames:['Project.parquet'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

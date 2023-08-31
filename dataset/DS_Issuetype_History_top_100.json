@@ -1,0 +1,16 @@
+{
+	"name": "DS_Issuetype_History_top_100",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Self_Host_LS",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Issuetype_History"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

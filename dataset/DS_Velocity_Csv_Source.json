@@ -1,0 +1,53 @@
+{
+	"name": "DS_Velocity_Csv_Source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Velocity.csv",
+				"folderPath": "16062023",
+				"container": "monthlymetricspbi"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Sprintid",
+				"type": "String"
+			},
+			{
+				"name": "CompletedValue",
+				"type": "String"
+			},
+			{
+				"name": "EstimatedValue",
+				"type": "String"
+			},
+			{
+				"name": "SprintSequence",
+				"type": "String"
+			},
+			{
+				"name": "SprintName",
+				"type": "String"
+			},
+			{
+				"name": "ProjectKey",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

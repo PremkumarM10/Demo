@@ -1,0 +1,9 @@
+{
+	"name": "data-bi-adf",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "49c48f92-bf35-4e11-8863-c71bdb720969",
+		"tenantId": "a9c50c6c-2ecc-4653-99b2-58024af91866"
+	}
+}

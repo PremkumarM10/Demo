@@ -1,0 +1,241 @@
+{
+	"name": "DF_Bug_V1_copy1",
+	"properties": {
+		"folder": {
+			"name": "Monthly_Metrics_V1/Bug"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "test_bug_v1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText4",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "flatten3"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "aggregate3"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "derivedColumn5"
+				},
+				{
+					"name": "aggregate4"
+				},
+				{
+					"name": "derivedColumn6"
+				},
+				{
+					"name": "derivedColumn7"
+				},
+				{
+					"name": "derivedColumn8"
+				},
+				{
+					"name": "derivedColumn9"
+				},
+				{
+					"name": "derivedColumn10"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     sink_Filename as string",
+				"}",
+				"source(output(",
+				"          ADFWebActivityResponseHeaders as ({Atl-Traceid} as string, {Cache-Control} as string, {Content-Type} as string, Date as string, Nel as string, {Report-To} as string, Server as string, {Set-Cookie} as string, {Strict-Transport-Security} as string, {Timing-Allow-Origin} as string, {Transfer-Encoding} as string, Vary as string, {X-Aaccountid} as string, {X-Arequestid} as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string),",
+				"          billingReference as (activityType as string, billableDuration as (duration as double, meterType as string, unit as string)[]),",
+				"          durationInQueue as (integrationRuntimeQueue as boolean),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as short,",
+				"          expand as string,",
+				"          issues as (expand as string, fields as (aggregateprogress as (percent as short, progress as integer, total as integer), aggregatetimeestimate as boolean, aggregatetimeoriginalestimate as string, aggregatetimespent as integer, assignee as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), components as (id as short, name as string, self as string)[], created as string, creator as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), customfield_10004 as string, customfield_10005 as double, customfield_10007 as (boardId as short, completeDate as string, endDate as timestamp, goal as string, id as short, name as string, startDate as string, state as string)[], customfield_10009 as string, customfield_10012 as string, customfield_10212 as string, customfield_10400 as (id as short, self as string, value as string), customfield_10601 as string, customfield_10700 as string, customfield_10702 as (id as short, self as string, value as string), customfield_10703 as string, customfield_10800 as (hasEpicLinkFieldDependency as boolean, nonEditableReason as (message as string, reason as string), showField as boolean), customfield_10900 as string, customfield_11000 as string, customfield_11100 as string, customfield_11200 as string, customfield_11307 as string, customfield_11308 as string[], customfield_11309 as string, customfield_11310 as string, customfield_11312 as string, customfield_11315 as string, customfield_11317 as string, customfield_11318 as string, customfield_11319 as string, customfield_11320 as string, customfield_11321 as string, customfield_11322 as string, customfield_11323 as string, customfield_11325 as string, customfield_11331 as string, customfield_11337 as string, customfield_11338 as (id as short, self as string, value as string), customfield_11339 as string, customfield_11341 as (id as short, self as string, value as string), customfield_11342 as (id as short, self as string, value as string), customfield_11343 as string, customfield_11345 as string, customfield_11347 as string, customfield_11348 as string, customfield_11350 as (id as short, self as string, value as string), customfield_11352 as string, customfield_11361 as string, customfield_11362 as string, customfield_11364 as string, customfield_11365 as string, customfield_11366 as string, customfield_11368 as string, customfield_11369 as string, customfield_11370 as string, customfield_11371 as string, customfield_11372 as string, customfield_11373 as string, customfield_11374 as string, customfield_11375 as string, customfield_11376 as string, customfield_11379 as string, customfield_11380 as string, customfield_11381 as string, customfield_11382 as string, customfield_11383 as string, customfield_11384 as string, customfield_11385 as string, customfield_11386 as string, customfield_11387 as string, customfield_11388 as string, customfield_11389 as string, customfield_11390 as string, customfield_11394 as string, customfield_11395 as string, customfield_11396 as string, customfield_11397 as string, customfield_11398 as string, customfield_11399 as string, customfield_11400 as string, customfield_11401 as string, customfield_11402 as string, customfield_11403 as string, customfield_11404 as string, customfield_11405 as string, customfield_11406 as string, customfield_11407 as string, customfield_11408 as string, customfield_11409 as string, customfield_11410 as string, customfield_11411 as string, customfield_11412 as string, customfield_11413 as string, customfield_11414 as string, customfield_11415 as string, customfield_11416 as string, customfield_11417 as string, customfield_11418 as string, customfield_11419 as string, customfield_11420 as string, customfield_11421 as string[], customfield_11422 as string, customfield_11423 as string, customfield_11424 as string, customfield_11425 as string, customfield_11426 as string, customfield_11427 as string, customfield_11428 as string, customfield_11429 as string, customfield_11431 as string, customfield_11432 as string, customfield_11433 as string, customfield_11434 as string, customfield_11435 as string, customfield_11436 as string, customfield_11437 as string, customfield_11438 as string, customfield_11439 as string, customfield_11440 as string, customfield_11441 as string, customfield_11442 as string, customfield_11443 as string, customfield_11444 as string, customfield_11445 as string, customfield_11446 as string, customfield_11447 as string, customfield_11448 as string, customfield_11449 as string, customfield_11450 as string, customfield_11451 as string, customfield_11452 as string, customfield_11453 as string, customfield_11454 as string, customfield_11455 as string, customfield_11469 as string, customfield_11471 as string, customfield_11472 as string, customfield_11474 as string, customfield_11475 as string, customfield_11476 as string, customfield_11478 as string, customfield_11479 as string, customfield_11480 as string, customfield_11482 as string, customfield_11483 as string, customfield_11502 as string, customfield_11503 as string, customfield_11504 as string, customfield_11505 as string, customfield_11507 as string, customfield_11512 as string, customfield_11513 as string, customfield_11514 as string, customfield_11515 as string, customfield_11517 as string, customfield_11518 as (id as short, self as string, value as boolean), customfield_11519 as string, customfield_11521 as string, customfield_11522 as string, customfield_11523 as string, description as string, duedate as date, environment as string, fixVersions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], issuelinks as (id as integer, inwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), outwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), self as string, type as (id as short, inward as string, name as string, outward as string, self as string))[], issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), labels as string[], lastViewed as string, parent as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as boolean, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), priority as (iconUrl as string, id as short, name as string, self as string), progress as (percent as short, progress as integer, total as integer), project as (avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), id as short, key as string, name as string, projectTypeKey as string, self as string, simplified as boolean), reporter as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), resolution as (description as string, id as short, name as string, self as string), resolutiondate as string, security as string, status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), statuscategorychangedate as string, subtasks as string[], summary as string, timeestimate as boolean, timeoriginalestimate as string, timespent as integer, updated as string, versions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], votes as (hasVoted as boolean, self as string, votes as boolean), watches as (isWatching as boolean, self as string, watchCount as short), workratio as short), id as integer, key as string, self as string)[],",
+				"          maxResults as short,",
+				"          startAt as boolean,",
+				"          total as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments',",
+				"     timestampFormats: ['MM-dd-yyyy HH:mm:ss','yyyy-MM-dd\\'T\\'HH:mm:ss\\'Z\\'']) ~> source1",
+				"source1 foldDown(unroll(issues, issues),",
+				"     mapColumn(",
+				"          Id = issues.id,",
+				"          Key = issues.key,",
+				"          Assignee_Name = issues.fields.assignee.displayName,",
+				"          Summary = issues.fields.summary,",
+				"          Issue_Name = issues.fields.issuetype.name,",
+				"          Created = issues.fields.created,",
+				"          Updated = issues.fields.updated,",
+				"          Poject_Id = issues.fields.project.id,",
+				"          Project_Key = issues.fields.project.key,",
+				"          Project_Name = issues.fields.project.name,",
+				"          Resolution_Name = issues.fields.resolution.name,",
+				"          Bug_Root_Cause = issues.fields.customfield_11350.value,",
+				"          Bug_Type = issues.fields.customfield_11338.value,",
+				"          Detection_Stage = issues.fields.customfield_10400.value,",
+				"          Severity = issues.fields.customfield_10702.value,",
+				"          Project_Type_Key = issues.fields.project.projectTypeKey,",
+				"          Story_Point = issues.fields.customfield_10005,",
+				"          Status_Name = issues.fields.status.name,",
+				"          Resolution = issues.fields.resolutiondate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"source1 foldDown(unroll(issues.fields.customfield_10007, issues),",
+				"     mapColumn(",
+				"          Sprint_Start_Date = issues.fields.customfield_10007.startDate,",
+				"          Sprint_CompleteDate = issues.fields.customfield_10007.completeDate,",
+				"          Sprint_Name = issues.fields.customfield_10007.name,",
+				"          Key = issues.key",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"source1 foldDown(unroll(issues.fields.issuelinks, issues),",
+				"     mapColumn(",
+				"          Priority_Name = issues.fields.priority.name,",
+				"          Key = issues.key",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten3",
+				"flatten1 aggregate(groupBy(Key),",
+				"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate1",
+				"flatten3 aggregate(groupBy(Key),",
+				"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate3",
+				"derivedColumn3, derivedColumn8 join(aggregate1@Key == aggregate4@Key,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1, aggregate3 join(aggregate1@Key == aggregate3@Key,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          Key = aggregate1@Key,",
+				"          Id,",
+				"          Assignee_Name,",
+				"          Summary,",
+				"          Issue_Name,",
+				"          Created,",
+				"          Updated,",
+				"          Poject_Id,",
+				"          Project_Key,",
+				"          Project_Name,",
+				"          Resolution_Name,",
+				"          Bug_Root_Cause,",
+				"          Bug_Type,",
+				"          Detection_Stage,",
+				"          Severity,",
+				"          Project_Type_Key,",
+				"          Story_Point,",
+				"          Status_Name,",
+				"          Resolution,",
+				"          Created_Date_Key,",
+				"          Created_Date,",
+				"          Updated_Date,",
+				"          Updated_Date_Key,",
+				"          Resolution_Date,",
+				"          Resolution_Date_key,",
+				"          Key = aggregate4@Key,",
+				"          Sprint_Start_Date,",
+				"          Sprint_CompleteDate,",
+				"          Sprint_Name,",
+				"          New_Sprint_Start_Date,",
+				"          New_Sprint_Complete_Date,",
+				"          New_Sprint_Start_Date_Key,",
+				"          New_Sprint_Complete_Date_Key,",
+				"          Key = aggregate3@Key,",
+				"          Priority_Name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn10 derive(Sprint_Start_Date = toTimestamp(Sprint_Start_Date, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+				"          Sprint_CompleteDate = toTimestamp(Sprint_CompleteDate, 'yyyy-MM-dd\\'T\\'HH:mm:ss')) ~> derivedColumn1",
+				"derivedColumn7 derive(Created_Date_Key = substring(toString(Created), 1,10),",
+				"          Created_Date = substring(toString(Created), 1,10),",
+				"          Updated_Date = substring(toString(Updated), 1,10),",
+				"          Updated_Date_Key = substring(toString(Updated), 1,10),",
+				"          Resolution_Date = substring(toString(Resolution), 1,10),",
+				"          Resolution_Date_key = substring(toString(Resolution), 1,10)) ~> derivedColumn2",
+				"derivedColumn2 derive(Created_Date_Key = replace(Created_Date_Key,\"-\",\"\"),",
+				"          Updated_Date_Key = replace(Updated_Date_Key,\"-\",\"\"),",
+				"          Resolution_Date_key = replace(Resolution_Date_key,\"-\",\"\")) ~> derivedColumn3",
+				"derivedColumn1 derive(Sprint_Start_Date = fromUTC(Sprint_Start_Date,'PST'),",
+				"          Sprint_CompleteDate = fromUTC(Sprint_CompleteDate,'PST')) ~> derivedColumn4",
+				"derivedColumn4 derive(New_Sprint_Start_Date = substring(toString(Sprint_Start_Date), 1,10),",
+				"          New_Sprint_Complete_Date = substring(toString(Sprint_CompleteDate), 1,10),",
+				"          New_Sprint_Start_Date_Key = substring(toString(Sprint_Start_Date), 1,10),",
+				"          New_Sprint_Complete_Date_Key = substring(toString(Sprint_CompleteDate), 1,10)) ~> derivedColumn5",
+				"flatten2 aggregate(groupBy(Key),",
+				"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate4",
+				"derivedColumn9 derive(Created = toTimestamp(Created, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+				"          Updated = toTimestamp(Updated, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+				"          Resolution = toTimestamp(Resolution, 'yyyy-MM-dd\\'T\\'HH:mm:ss')) ~> derivedColumn6",
+				"derivedColumn6 derive(Created = fromUTC(Created,'PST'),",
+				"          Updated = fromUTC(Updated,'PST'),",
+				"          Resolution = fromUTC(Resolution,'PST')) ~> derivedColumn7",
+				"derivedColumn5 derive(New_Sprint_Start_Date_Key = replace(New_Sprint_Start_Date_Key,\"-\",\"\"),",
+				"          New_Sprint_Complete_Date_Key = replace(New_Sprint_Complete_Date_Key,\"-\",\"\")) ~> derivedColumn8",
+				"aggregate1 derive(Created = substring(Created, 1, 19),",
+				"          Updated = substring(Updated, 1, 19),",
+				"          Resolution = substring(Resolution, 1, 19)) ~> derivedColumn9",
+				"aggregate4 derive(Sprint_Start_Date = substring(Sprint_Start_Date, 1, 19),",
+				"          Sprint_CompleteDate = substring(Sprint_CompleteDate, 1, 19)) ~> derivedColumn10",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[(toString($sink_Filename))],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

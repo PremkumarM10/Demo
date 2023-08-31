@@ -1,0 +1,222 @@
+{
+	"name": "DS_Issuetype_History_test_input_df",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"scr_filename": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Issuetype_History"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().scr_filename",
+					"type": "Expression"
+				},
+				"container": "test"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"self": {
+					"type": "string"
+				},
+				"maxResults": {
+					"type": "integer"
+				},
+				"startAt": {
+					"type": "integer"
+				},
+				"total": {
+					"type": "integer"
+				},
+				"isLast": {
+					"type": "boolean"
+				},
+				"values": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"author": {
+								"type": "object",
+								"properties": {
+									"self": {
+										"type": "string"
+									},
+									"accountId": {
+										"type": "string"
+									},
+									"avatarUrls": {
+										"type": "object",
+										"properties": {
+											"48x48": {
+												"type": "string"
+											},
+											"24x24": {
+												"type": "string"
+											},
+											"16x16": {
+												"type": "string"
+											},
+											"32x32": {
+												"type": "string"
+											}
+										}
+									},
+									"displayName": {
+										"type": "string"
+									},
+									"active": {
+										"type": "boolean"
+									},
+									"timeZone": {
+										"type": "string"
+									},
+									"accountType": {
+										"type": "string"
+									}
+								}
+							},
+							"created": {
+								"type": "string"
+							},
+							"items": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"field": {
+											"type": "string"
+										},
+										"fieldtype": {
+											"type": "string"
+										},
+										"from": {
+											"type": "null"
+										},
+										"fromString": {
+											"type": "null"
+										},
+										"to": {
+											"type": "string"
+										},
+										"toString": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"ADFWebActivityResponseHeaders": {
+					"type": "object",
+					"properties": {
+						"Timing-Allow-Origin": {
+							"type": "string"
+						},
+						"X-Arequestid": {
+							"type": "string"
+						},
+						"X-Aaccountid": {
+							"type": "string"
+						},
+						"Vary": {
+							"type": "string"
+						},
+						"X-Content-Type-Options": {
+							"type": "string"
+						},
+						"X-Xss-Protection": {
+							"type": "string"
+						},
+						"Atl-Traceid": {
+							"type": "string"
+						},
+						"Report-To": {
+							"type": "string"
+						},
+						"Nel": {
+							"type": "string"
+						},
+						"Strict-Transport-Security": {
+							"type": "string"
+						},
+						"Transfer-Encoding": {
+							"type": "string"
+						},
+						"Cache-Control": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"Set-Cookie": {
+							"type": "string"
+						},
+						"Server": {
+							"type": "string"
+						},
+						"Content-Type": {
+							"type": "string"
+						}
+					}
+				},
+				"effectiveIntegrationRuntime": {
+					"type": "string"
+				},
+				"executionDuration": {
+					"type": "integer"
+				},
+				"durationInQueue": {
+					"type": "object",
+					"properties": {
+						"integrationRuntimeQueue": {
+							"type": "integer"
+						}
+					}
+				},
+				"billingReference": {
+					"type": "object",
+					"properties": {
+						"activityType": {
+							"type": "string"
+						},
+						"billableDuration": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"meterType": {
+										"type": "string"
+									},
+									"duration": {
+										"type": "number"
+									},
+									"unit": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

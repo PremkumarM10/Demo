@@ -1,0 +1,50 @@
+{
+	"name": "DS_Velocity_input_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "velocity.parquet",
+				"folderPath": "16062023",
+				"container": "monthlymetricspbi"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Sprintid",
+				"type": "UTF8"
+			},
+			{
+				"name": "CompletedValue",
+				"type": "UTF8"
+			},
+			{
+				"name": "EstimatedValue",
+				"type": "UTF8"
+			},
+			{
+				"name": "SprintSequence",
+				"type": "UTF8"
+			},
+			{
+				"name": "SprintName",
+				"type": "UTF8"
+			},
+			{
+				"name": "ProjectKey",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,365 @@
+{
+	"name": "PL_Validation_prem_copy4",
+	"properties": {
+		"activities": [
+			{
+				"name": "web_1_read The Jira RestApi",
+				"description": "To Know Total No_Of_Records present in RestApi",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "var_1_EX_Start",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt=0&maxResults=100",
+					"method": "GET",
+					"authentication": {
+						"type": "Basic",
+						"username": "rama.veluri@global-csg.com",
+						"password": {
+							"type": "SecureString",
+							"value": "**********"
+						}
+					}
+				}
+			},
+			{
+				"name": "var_2_total_no_of_rec",
+				"description": "to store the total number of record value",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "web_1_read The Jira RestApi",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "record_from restapi",
+					"value": {
+						"value": "@string(activity('web_1_read The Jira RestApi').output.total)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Lookup_1_read_file",
+				"description": "read the cleaned data parquet file",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "var_2_total_no_of_rec",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "var_3_Total_no_of_rec",
+				"description": "store total no of record's from the cleaned file",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup_1_read_file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "record_from_File",
+					"value": {
+						"value": "@string(activity('Lookup_1_read_file').output.count)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "var_6_to_store_date",
+				"description": "to store the execution date",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Fetching invavlid_duplicate records",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "date",
+					"value": {
+						"value": "@string(utcnow())",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "var_1_EX_Start",
+				"description": "PL_execution starting time",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PL_startTime",
+					"value": {
+						"value": "@convertTimeZone(utcnow(), 'UTC', 'India Standard Time')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Collecting Error Details",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "var_6_to_store_date",
+						"dependencyConditions": [
+							"Skipped",
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Error_Detail",
+					"value": {
+						"value": "@concat(\n    replace(coalesce(activity('var_1_EX_Start')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('web_1_read The Jira RestApi')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_2_total_no_of_rec')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('Lookup_1_read_file')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_3_Total_no_of_rec')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_6_to_store_date')?.Error?.message, ''), '''', '\"'),\n    ' | '\n)\n",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "var_8_PL_end_Time_copy1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "insert into PL_Logs values(\n    '@{pipeline().DataFactory}',\n    '@{pipeline().Pipeline}',\n    '@{pipeline().RunId}',\n    '@{variables('record_from restapi')}',\n    '@{variables('record_from_File')}',\n    '@{variables('Invalid_Records')}',\n    '@{string('Bug')}',\n    '@{pipeline().TriggerId}',\n    '@{pipeline().TriggerName}',\n    '@{pipeline().TriggerTime}',\n    '@{pipeline().TriggerType}',\n    '@{variables('date')}',\n    '@{variables('PL_startTime')}',\n    '@{variables('PL_EndTime')}',\nconvert(varchar(8),dateadd(second,DATEDIFF(SECOND,'@{variables('PL_startTime')}', '@{variables('PL_EndTime')}'),0),108),\n'@{variables('PL_status')}',\n'@{variables('Error_Detail')}')",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "var_8_PL_end_Time_copy1",
+				"description": "PL execution ending time",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PL_EndTime",
+					"value": {
+						"value": "@convertTimeZone(utcnow(), 'UTC', 'India Standard Time')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Collecting Error Details",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Pl Status",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Pl Status",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "var_6_to_store_date",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PL_status",
+					"value": "Success"
+				}
+			},
+			{
+				"name": "Fetching invavlid_duplicate records",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "var_3_Total_no_of_rec",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Invalid_Records",
+					"value": {
+						"value": "@{string(sub(int(variables('record_from restapi')), int(variables('record_from_File'))))} records are duplicate or invalid recordsss\n",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"record_from restapi": {
+				"type": "String"
+			},
+			"record_from_File": {
+				"type": "String"
+			},
+			"date": {
+				"type": "String"
+			},
+			"PL_startTime": {
+				"type": "String"
+			},
+			"PL_EndTime": {
+				"type": "String"
+			},
+			"utc_time": {
+				"type": "String"
+			},
+			"time": {
+				"type": "String"
+			},
+			"Error_Detail": {
+				"type": "String",
+				"defaultValue": "null"
+			},
+			"PL_status": {
+				"type": "String",
+				"defaultValue": "Failed"
+			},
+			"Invalid_Records": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "hema"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-26T08:54:54Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

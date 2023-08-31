@@ -1,0 +1,207 @@
+{
+	"name": "DS_Project_Source_DF",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Project"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Project.json",
+				"folderPath": "Project",
+				"container": "monthlymetrics"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"self": {
+					"type": "string"
+				},
+				"maxResults": {
+					"type": "integer"
+				},
+				"startAt": {
+					"type": "integer"
+				},
+				"total": {
+					"type": "integer"
+				},
+				"isLast": {
+					"type": "boolean"
+				},
+				"values": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"expand": {
+								"type": "string"
+							},
+							"self": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"key": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"avatarUrls": {
+								"type": "object",
+								"properties": {
+									"48x48": {
+										"type": "string"
+									},
+									"24x24": {
+										"type": "string"
+									},
+									"16x16": {
+										"type": "string"
+									},
+									"32x32": {
+										"type": "string"
+									}
+								}
+							},
+							"projectCategory": {
+								"type": "object",
+								"properties": {
+									"self": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									}
+								}
+							},
+							"projectTypeKey": {
+								"type": "string"
+							},
+							"simplified": {
+								"type": "boolean"
+							},
+							"style": {
+								"type": "string"
+							},
+							"isPrivate": {
+								"type": "boolean"
+							},
+							"properties": {
+								"type": "object"
+							}
+						}
+					}
+				},
+				"ADFWebActivityResponseHeaders": {
+					"type": "object",
+					"properties": {
+						"Timing-Allow-Origin": {
+							"type": "string"
+						},
+						"X-Arequestid": {
+							"type": "string"
+						},
+						"X-Aaccountid": {
+							"type": "string"
+						},
+						"Vary": {
+							"type": "string"
+						},
+						"X-Content-Type-Options": {
+							"type": "string"
+						},
+						"X-Xss-Protection": {
+							"type": "string"
+						},
+						"Atl-Traceid": {
+							"type": "string"
+						},
+						"Report-To": {
+							"type": "string"
+						},
+						"Nel": {
+							"type": "string"
+						},
+						"Strict-Transport-Security": {
+							"type": "string"
+						},
+						"Transfer-Encoding": {
+							"type": "string"
+						},
+						"Cache-Control": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"Set-Cookie": {
+							"type": "string"
+						},
+						"Server": {
+							"type": "string"
+						},
+						"Content-Type": {
+							"type": "string"
+						}
+					}
+				},
+				"effectiveIntegrationRuntime": {
+					"type": "string"
+				},
+				"executionDuration": {
+					"type": "integer"
+				},
+				"durationInQueue": {
+					"type": "object",
+					"properties": {
+						"integrationRuntimeQueue": {
+							"type": "integer"
+						}
+					}
+				},
+				"billingReference": {
+					"type": "object",
+					"properties": {
+						"activityType": {
+							"type": "string"
+						},
+						"billableDuration": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"meterType": {
+										"type": "string"
+									},
+									"duration": {
+										"type": "number"
+									},
+									"unit": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

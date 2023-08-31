@@ -1,0 +1,1140 @@
+{
+	"name": "test_bug_v1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"scr_Filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().scr_Filename",
+					"type": "Expression"
+				},
+				"folderPath": "BugV1",
+				"container": "monthlymetrics"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"expand": {
+					"type": "string"
+				},
+				"startAt": {
+					"type": "integer"
+				},
+				"maxResults": {
+					"type": "integer"
+				},
+				"total": {
+					"type": "integer"
+				},
+				"issues": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"expand": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"self": {
+								"type": "string"
+							},
+							"key": {
+								"type": "string"
+							},
+							"fields": {
+								"type": "object",
+								"properties": {
+									"statuscategorychangedate": {
+										"type": "string"
+									},
+									"customfield_11441": {
+										"type": "null"
+									},
+									"customfield_11320": {
+										"type": "null"
+									},
+									"fixVersions": {
+										"type": "array"
+									},
+									"customfield_11440": {
+										"type": "null"
+									},
+									"customfield_11443": {
+										"type": "null"
+									},
+									"customfield_11200": {
+										"type": "null"
+									},
+									"customfield_11321": {
+										"type": "null"
+									},
+									"customfield_11322": {
+										"type": "null"
+									},
+									"resolution": {
+										"type": "null"
+									},
+									"customfield_11442": {
+										"type": "null"
+									},
+									"customfield_11323": {
+										"type": "null"
+									},
+									"customfield_11445": {
+										"type": "null"
+									},
+									"customfield_11444": {
+										"type": "null"
+									},
+									"customfield_11436": {
+										"type": "null"
+									},
+									"customfield_11435": {
+										"type": "null"
+									},
+									"customfield_11438": {
+										"type": "null"
+									},
+									"customfield_11437": {
+										"type": "null"
+									},
+									"customfield_11317": {
+										"type": "null"
+									},
+									"customfield_10900": {
+										"type": "string"
+									},
+									"customfield_11318": {
+										"type": "null"
+									},
+									"customfield_11439": {
+										"type": "null"
+									},
+									"customfield_11319": {
+										"type": "null"
+									},
+									"lastViewed": {
+										"type": "null"
+									},
+									"customfield_11390": {
+										"type": "null"
+									},
+									"customfield_11395": {
+										"type": "null"
+									},
+									"customfield_11394": {
+										"type": "null"
+									},
+									"customfield_11397": {
+										"type": "null"
+									},
+									"customfield_11396": {
+										"type": "null"
+									},
+									"priority": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"iconUrl": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										}
+									},
+									"customfield_11399": {
+										"type": "null"
+									},
+									"customfield_11310": {
+										"type": "null"
+									},
+									"customfield_11432": {
+										"type": "null"
+									},
+									"customfield_11398": {
+										"type": "null"
+									},
+									"customfield_11431": {
+										"type": "null"
+									},
+									"customfield_11312": {
+										"type": "null"
+									},
+									"customfield_11434": {
+										"type": "null"
+									},
+									"customfield_11433": {
+										"type": "null"
+									},
+									"labels": {
+										"type": "array"
+									},
+									"customfield_11425": {
+										"type": "null"
+									},
+									"customfield_11424": {
+										"type": "null"
+									},
+									"customfield_11427": {
+										"type": "null"
+									},
+									"customfield_11426": {
+										"type": "null"
+									},
+									"aggregatetimeoriginalestimate": {
+										"type": "null"
+									},
+									"customfield_11429": {
+										"type": "null"
+									},
+									"customfield_11307": {
+										"type": "null"
+									},
+									"timeestimate": {
+										"type": "null"
+									},
+									"versions": {
+										"type": "array"
+									},
+									"customfield_11428": {
+										"type": "null"
+									},
+									"customfield_11308": {
+										"type": "array"
+									},
+									"customfield_11309": {
+										"type": "null"
+									},
+									"issuelinks": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string"
+												},
+												"self": {
+													"type": "string"
+												},
+												"type": {
+													"type": "object",
+													"properties": {
+														"id": {
+															"type": "string"
+														},
+														"name": {
+															"type": "string"
+														},
+														"inward": {
+															"type": "string"
+														},
+														"outward": {
+															"type": "string"
+														},
+														"self": {
+															"type": "string"
+														}
+													}
+												},
+												"outwardIssue": {
+													"type": "object",
+													"properties": {
+														"id": {
+															"type": "string"
+														},
+														"key": {
+															"type": "string"
+														},
+														"self": {
+															"type": "string"
+														},
+														"fields": {
+															"type": "object",
+															"properties": {
+																"summary": {
+																	"type": "string"
+																},
+																"status": {
+																	"type": "object",
+																	"properties": {
+																		"self": {
+																			"type": "string"
+																		},
+																		"description": {
+																			"type": "string"
+																		},
+																		"iconUrl": {
+																			"type": "string"
+																		},
+																		"name": {
+																			"type": "string"
+																		},
+																		"id": {
+																			"type": "string"
+																		},
+																		"statusCategory": {
+																			"type": "object",
+																			"properties": {
+																				"self": {
+																					"type": "string"
+																				},
+																				"id": {
+																					"type": "integer"
+																				},
+																				"key": {
+																					"type": "string"
+																				},
+																				"colorName": {
+																					"type": "string"
+																				},
+																				"name": {
+																					"type": "string"
+																				}
+																			}
+																		}
+																	}
+																},
+																"priority": {
+																	"type": "object",
+																	"properties": {
+																		"self": {
+																			"type": "string"
+																		},
+																		"iconUrl": {
+																			"type": "string"
+																		},
+																		"name": {
+																			"type": "string"
+																		},
+																		"id": {
+																			"type": "string"
+																		}
+																	}
+																},
+																"issuetype": {
+																	"type": "object",
+																	"properties": {
+																		"self": {
+																			"type": "string"
+																		},
+																		"id": {
+																			"type": "string"
+																		},
+																		"description": {
+																			"type": "string"
+																		},
+																		"iconUrl": {
+																			"type": "string"
+																		},
+																		"name": {
+																			"type": "string"
+																		},
+																		"subtask": {
+																			"type": "boolean"
+																		},
+																		"avatarId": {
+																			"type": "integer"
+																		},
+																		"hierarchyLevel": {
+																			"type": "integer"
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"assignee": {
+										"type": "null"
+									},
+									"status": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"description": {
+												"type": "string"
+											},
+											"iconUrl": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"statusCategory": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"id": {
+														"type": "integer"
+													},
+													"key": {
+														"type": "string"
+													},
+													"colorName": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									},
+									"components": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"self": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"customfield_11380": {
+										"type": "null"
+									},
+									"customfield_11382": {
+										"type": "null"
+									},
+									"customfield_11381": {
+										"type": "null"
+									},
+									"customfield_11384": {
+										"type": "null"
+									},
+									"customfield_11383": {
+										"type": "null"
+									},
+									"customfield_11386": {
+										"type": "null"
+									},
+									"customfield_11385": {
+										"type": "null"
+									},
+									"customfield_11388": {
+										"type": "null"
+									},
+									"customfield_11421": {
+										"type": "array"
+									},
+									"customfield_11387": {
+										"type": "null"
+									},
+									"customfield_11420": {
+										"type": "null"
+									},
+									"customfield_10212": {
+										"type": "null"
+									},
+									"customfield_11423": {
+										"type": "null"
+									},
+									"customfield_11422": {
+										"type": "null"
+									},
+									"customfield_11389": {
+										"type": "null"
+									},
+									"customfield_11414": {
+										"type": "null"
+									},
+									"customfield_11413": {
+										"type": "null"
+									},
+									"customfield_11416": {
+										"type": "null"
+									},
+									"customfield_10601": {
+										"type": "null"
+									},
+									"customfield_11415": {
+										"type": "null"
+									},
+									"customfield_11418": {
+										"type": "null"
+									},
+									"aggregatetimeestimate": {
+										"type": "null"
+									},
+									"customfield_11417": {
+										"type": "null"
+									},
+									"customfield_11419": {
+										"type": "null"
+									},
+									"creator": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"accountId": {
+												"type": "string"
+											},
+											"avatarUrls": {
+												"type": "object",
+												"properties": {
+													"48x48": {
+														"type": "string"
+													},
+													"24x24": {
+														"type": "string"
+													},
+													"16x16": {
+														"type": "string"
+													},
+													"32x32": {
+														"type": "string"
+													}
+												}
+											},
+											"displayName": {
+												"type": "string"
+											},
+											"active": {
+												"type": "boolean"
+											},
+											"timeZone": {
+												"type": "string"
+											},
+											"accountType": {
+												"type": "string"
+											}
+										}
+									},
+									"subtasks": {
+										"type": "array"
+									},
+									"customfield_11371": {
+										"type": "null"
+									},
+									"customfield_11370": {
+										"type": "null"
+									},
+									"customfield_11373": {
+										"type": "null"
+									},
+									"customfield_11372": {
+										"type": "null"
+									},
+									"reporter": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"accountId": {
+												"type": "string"
+											},
+											"avatarUrls": {
+												"type": "object",
+												"properties": {
+													"48x48": {
+														"type": "string"
+													},
+													"24x24": {
+														"type": "string"
+													},
+													"16x16": {
+														"type": "string"
+													},
+													"32x32": {
+														"type": "string"
+													}
+												}
+											},
+											"displayName": {
+												"type": "string"
+											},
+											"active": {
+												"type": "boolean"
+											},
+											"timeZone": {
+												"type": "string"
+											},
+											"accountType": {
+												"type": "string"
+											}
+										}
+									},
+									"customfield_11375": {
+										"type": "null"
+									},
+									"customfield_11374": {
+										"type": "null"
+									},
+									"aggregateprogress": {
+										"type": "object",
+										"properties": {
+											"progress": {
+												"type": "integer"
+											},
+											"total": {
+												"type": "integer"
+											}
+										}
+									},
+									"customfield_11410": {
+										"type": "null"
+									},
+									"customfield_11376": {
+										"type": "null"
+									},
+									"customfield_11412": {
+										"type": "null"
+									},
+									"customfield_11379": {
+										"type": "null"
+									},
+									"customfield_11411": {
+										"type": "null"
+									},
+									"customfield_11403": {
+										"type": "null"
+									},
+									"customfield_11523": {
+										"type": "null"
+									},
+									"customfield_11369": {
+										"type": "null"
+									},
+									"customfield_11402": {
+										"type": "null"
+									},
+									"customfield_11405": {
+										"type": "null"
+									},
+									"customfield_11404": {
+										"type": "null"
+									},
+									"customfield_11407": {
+										"type": "null"
+									},
+									"customfield_11406": {
+										"type": "null"
+									},
+									"customfield_11409": {
+										"type": "null"
+									},
+									"customfield_11408": {
+										"type": "null"
+									},
+									"progress": {
+										"type": "object",
+										"properties": {
+											"progress": {
+												"type": "integer"
+											},
+											"total": {
+												"type": "integer"
+											}
+										}
+									},
+									"votes": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"votes": {
+												"type": "integer"
+											},
+											"hasVoted": {
+												"type": "boolean"
+											}
+										}
+									},
+									"issuetype": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"description": {
+												"type": "string"
+											},
+											"iconUrl": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"subtask": {
+												"type": "boolean"
+											},
+											"avatarId": {
+												"type": "integer"
+											},
+											"hierarchyLevel": {
+												"type": "integer"
+											}
+										}
+									},
+									"timespent": {
+										"type": "null"
+									},
+									"customfield_11480": {
+										"type": "null"
+									},
+									"customfield_11483": {
+										"type": "null"
+									},
+									"customfield_11362": {
+										"type": "null"
+									},
+									"customfield_11482": {
+										"type": "null"
+									},
+									"project": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											},
+											"key": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"projectTypeKey": {
+												"type": "string"
+											},
+											"simplified": {
+												"type": "boolean"
+											},
+											"avatarUrls": {
+												"type": "object",
+												"properties": {
+													"48x48": {
+														"type": "string"
+													},
+													"24x24": {
+														"type": "string"
+													},
+													"16x16": {
+														"type": "string"
+													},
+													"32x32": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									},
+									"customfield_11361": {
+										"type": "null"
+									},
+									"customfield_11000": {
+										"type": "null"
+									},
+									"customfield_11364": {
+										"type": "null"
+									},
+									"aggregatetimespent": {
+										"type": "null"
+									},
+									"customfield_11366": {
+										"type": "null"
+									},
+									"customfield_11365": {
+										"type": "null"
+									},
+									"customfield_11401": {
+										"type": "null"
+									},
+									"customfield_11522": {
+										"type": "null"
+									},
+									"customfield_11368": {
+										"type": "null"
+									},
+									"customfield_11400": {
+										"type": "null"
+									},
+									"customfield_11521": {
+										"type": "null"
+									},
+									"customfield_11513": {
+										"type": "null"
+									},
+									"customfield_11479": {
+										"type": "null"
+									},
+									"customfield_11512": {
+										"type": "null"
+									},
+									"customfield_10700": {
+										"type": "null"
+									},
+									"customfield_11515": {
+										"type": "null"
+									},
+									"customfield_11514": {
+										"type": "null"
+									},
+									"customfield_10702": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"value": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										}
+									},
+									"customfield_11517": {
+										"type": "null"
+									},
+									"customfield_10703": {
+										"type": "null"
+									},
+									"resolutiondate": {
+										"type": "null"
+									},
+									"customfield_11519": {
+										"type": "null"
+									},
+									"workratio": {
+										"type": "integer"
+									},
+									"watches": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"watchCount": {
+												"type": "integer"
+											},
+											"isWatching": {
+												"type": "boolean"
+											}
+										}
+									},
+									"created": {
+										"type": "string"
+									},
+									"customfield_11472": {
+										"type": "null"
+									},
+									"customfield_11471": {
+										"type": "null"
+									},
+									"customfield_11474": {
+										"type": "null"
+									},
+									"customfield_11352": {
+										"type": "null"
+									},
+									"customfield_11476": {
+										"type": "null"
+									},
+									"customfield_11475": {
+										"type": "null"
+									},
+									"customfield_11478": {
+										"type": "null"
+									},
+									"customfield_11469": {
+										"type": "null"
+									},
+									"customfield_11348": {
+										"type": "null"
+									},
+									"customfield_11502": {
+										"type": "null"
+									},
+									"customfield_11347": {
+										"type": "null"
+									},
+									"customfield_11504": {
+										"type": "null"
+									},
+									"customfield_11503": {
+										"type": "null"
+									},
+									"customfield_11505": {
+										"type": "null"
+									},
+									"customfield_11507": {
+										"type": "null"
+									},
+									"updated": {
+										"type": "string"
+									},
+									"timeoriginalestimate": {
+										"type": "null"
+									},
+									"description": {
+										"type": "string"
+									},
+									"customfield_11342": {
+										"type": "object",
+										"properties": {
+											"self": {
+												"type": "string"
+											},
+											"value": {
+												"type": "string"
+											},
+											"id": {
+												"type": "string"
+											}
+										}
+									},
+									"customfield_11100": {
+										"type": "null"
+									},
+									"customfield_10012": {
+										"type": "string"
+									},
+									"customfield_11343": {
+										"type": "null"
+									},
+									"customfield_11345": {
+										"type": "null"
+									},
+									"customfield_10005": {
+										"type": "null"
+									},
+									"customfield_11337": {
+										"type": "null"
+									},
+									"customfield_11339": {
+										"type": "null"
+									},
+									"customfield_10007": {
+										"type": "null"
+									},
+									"security": {
+										"type": "null"
+									},
+									"customfield_11338": {
+										"type": "null"
+									},
+									"customfield_10800": {
+										"type": "object",
+										"properties": {
+											"hasEpicLinkFieldDependency": {
+												"type": "boolean"
+											},
+											"showField": {
+												"type": "boolean"
+											},
+											"nonEditableReason": {
+												"type": "object",
+												"properties": {
+													"reason": {
+														"type": "string"
+													},
+													"message": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									},
+									"customfield_10009": {
+										"type": "null"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"customfield_11450": {
+										"type": "null"
+									},
+									"customfield_11452": {
+										"type": "null"
+									},
+									"customfield_11331": {
+										"type": "null"
+									},
+									"customfield_11451": {
+										"type": "null"
+									},
+									"customfield_11454": {
+										"type": "null"
+									},
+									"customfield_11453": {
+										"type": "null"
+									},
+									"customfield_11455": {
+										"type": "null"
+									},
+									"customfield_10400": {
+										"type": "null"
+									},
+									"customfield_10004": {
+										"type": "null"
+									},
+									"customfield_11447": {
+										"type": "null"
+									},
+									"customfield_11325": {
+										"type": "null"
+									},
+									"customfield_11446": {
+										"type": "null"
+									},
+									"customfield_11449": {
+										"type": "null"
+									},
+									"environment": {
+										"type": "null"
+									},
+									"customfield_11448": {
+										"type": "null"
+									},
+									"duedate": {
+										"type": "null"
+									}
+								}
+							}
+						}
+					}
+				},
+				"ADFWebActivityResponseHeaders": {
+					"type": "object",
+					"properties": {
+						"Timing-Allow-Origin": {
+							"type": "string"
+						},
+						"X-Arequestid": {
+							"type": "string"
+						},
+						"X-Aaccountid": {
+							"type": "string"
+						},
+						"Vary": {
+							"type": "string"
+						},
+						"X-Content-Type-Options": {
+							"type": "string"
+						},
+						"X-Xss-Protection": {
+							"type": "string"
+						},
+						"Atl-Traceid": {
+							"type": "string"
+						},
+						"Report-To": {
+							"type": "string"
+						},
+						"Nel": {
+							"type": "string"
+						},
+						"Strict-Transport-Security": {
+							"type": "string"
+						},
+						"Transfer-Encoding": {
+							"type": "string"
+						},
+						"Cache-Control": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"Set-Cookie": {
+							"type": "string"
+						},
+						"Server": {
+							"type": "string"
+						},
+						"Content-Type": {
+							"type": "string"
+						}
+					}
+				},
+				"effectiveIntegrationRuntime": {
+					"type": "string"
+				},
+				"executionDuration": {
+					"type": "integer"
+				},
+				"durationInQueue": {
+					"type": "object",
+					"properties": {
+						"integrationRuntimeQueue": {
+							"type": "integer"
+						}
+					}
+				},
+				"billingReference": {
+					"type": "object",
+					"properties": {
+						"activityType": {
+							"type": "string"
+						},
+						"billableDuration": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"meterType": {
+										"type": "string"
+									},
+									"duration": {
+										"type": "number"
+									},
+									"unit": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

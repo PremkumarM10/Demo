@@ -1,0 +1,165 @@
+{
+	"name": "DS_Parquet_DimTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/DimDate"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "DimDate.parquet",
+				"container": "output"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "DateKey",
+				"type": "UTF8"
+			},
+			{
+				"name": "Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "DayOfMonth",
+				"type": "UTF8"
+			},
+			{
+				"name": "DaySuffix",
+				"type": "UTF8"
+			},
+			{
+				"name": "DayName",
+				"type": "UTF8"
+			},
+			{
+				"name": "DayOfWeek",
+				"type": "UTF8"
+			},
+			{
+				"name": "DayOfWeekUSA",
+				"type": "UTF8"
+			},
+			{
+				"name": "RunningCountOfDayInMonth",
+				"type": "UTF8"
+			},
+			{
+				"name": "RunningCountOfDayInYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "RunningCountOfDayInQuarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "DayOfYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "WeekOfMonth",
+				"type": "UTF8"
+			},
+			{
+				"name": "WeekOfQuarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "WeekOfYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "Month",
+				"type": "UTF8"
+			},
+			{
+				"name": "MonthName",
+				"type": "UTF8"
+			},
+			{
+				"name": "MonthOfQuarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "Quarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "QuarterName",
+				"type": "UTF8"
+			},
+			{
+				"name": "Year",
+				"type": "UTF8"
+			},
+			{
+				"name": "YearName",
+				"type": "UTF8"
+			},
+			{
+				"name": "MonthYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "YYYYMM",
+				"type": "UTF8"
+			},
+			{
+				"name": "MMYYYY",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirstDayOfWeekInYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "LastDayOfWeekInYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirstDayOfWeek",
+				"type": "UTF8"
+			},
+			{
+				"name": "LastDayOfWeek",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirstDayOfMonth",
+				"type": "UTF8"
+			},
+			{
+				"name": "LastDayOfMonth",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirstDayOfQuarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "LastDayOfQuarter",
+				"type": "UTF8"
+			},
+			{
+				"name": "FirstDayOfYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "LastDayOfYear",
+				"type": "UTF8"
+			},
+			{
+				"name": "IsWeekday",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,168 @@
+{
+	"name": "DF_Issuetype_History",
+	"properties": {
+		"folder": {
+			"name": "Monthly_Metrics_V1/Issuetype_History"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Issuetype_History_test_input_df",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Issuetype_History_Test_output_df",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "derivedColumn5"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn6"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "derivedColumn7"
+				},
+				{
+					"name": "derivedColumn8"
+				},
+				{
+					"name": "join2"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     sink_filename as string",
+				"}",
+				"source(output(",
+				"          self as string,",
+				"          maxResults as integer,",
+				"          startAt as integer,",
+				"          total as integer,",
+				"          isLast as boolean,",
+				"          values as (id as string, author as (self as string, accountId as string, avatarUrls as ({48x48} as string, {24x24} as string, {16x16} as string, {32x32} as string), displayName as string, active as boolean, timeZone as string, accountType as string), created as string, items as (field as string, fieldtype as string, from as string, fromString as string, to as string, toString as string)[])[],",
+				"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+				"          effectiveIntegrationRuntime as string,",
+				"          executionDuration as integer,",
+				"          durationInQueue as (integrationRuntimeQueue as integer),",
+				"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     rowUrlColumn: 'filename',",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 foldDown(unroll(values, values),",
+				"     mapColumn(",
+				"          Id = values.id,",
+				"          Old_Created_Date = values.created,",
+				"          Name = values.author.displayName",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"source1 foldDown(unroll(values.items, values),",
+				"     mapColumn(",
+				"          Id = values.id,",
+				"          From_String = values.items.fromString,",
+				"          To_String = values.items.toString",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2, flatten1 join(flatten2@Id == flatten1@Id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          Id = flatten1@Id,",
+				"          Name,",
+				"          From_String,",
+				"          To_String,",
+				"          Old_Created_Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(new = toTimestamp(Old_Created_Date, 'yyyy-MM-dd\\'T\\'HH:mm:ss.SSSXXX')) ~> derivedColumn1",
+				"derivedColumn1 derive(new2 = fromUTC(new,'PST')) ~> derivedColumn2",
+				"derivedColumn2 derive(New_Creatd_Date = toString(new2)) ~> derivedColumn3",
+				"derivedColumn5 derive(Time = substring(New_Creatd_Date,11,20),",
+				"          key2 = 1) ~> derivedColumn4",
+				"derivedColumn3 derive(Date = substring(New_Creatd_Date,1,10)) ~> derivedColumn5",
+				"join2 select(mapColumn(",
+				"          Id,",
+				"          Key,",
+				"          Name,",
+				"          From_String,",
+				"          To_String,",
+				"          Old_Created_Date,",
+				"          New_Creatd_Date,",
+				"          Date,",
+				"          Time",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"source1 derive(key1 = 1) ~> derivedColumn6",
+				"derivedColumn6 select(mapColumn(",
+				"          filename,",
+				"          key1",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"select3 derive(filename1 = replace(filename,\"/IssueHistory_\",\"\")) ~> derivedColumn7",
+				"derivedColumn7 derive(Key = replace(filename1,\".json\",\"\")) ~> derivedColumn8",
+				"derivedColumn4, derivedColumn8 join(key2 == key1,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[(toString($sink_filename))],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

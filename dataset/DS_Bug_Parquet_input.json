@@ -1,0 +1,170 @@
+{
+	"name": "DS_Bug_Parquet_input",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Bug"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Bug.parquet",
+				"folderPath": "04072023",
+				"container": "monthlymetricspbi"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "Assignee_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Summary",
+				"type": "UTF8"
+			},
+			{
+				"name": "Issue_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Created",
+				"type": "UTF8"
+			},
+			{
+				"name": "Updated",
+				"type": "UTF8"
+			},
+			{
+				"name": "Poject_Id",
+				"type": "UTF8"
+			},
+			{
+				"name": "Project_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Project_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Resolution_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Bug_Root_Cause",
+				"type": "UTF8"
+			},
+			{
+				"name": "Bug_Type",
+				"type": "UTF8"
+			},
+			{
+				"name": "Detection_Stage",
+				"type": "UTF8"
+			},
+			{
+				"name": "Severity",
+				"type": "UTF8"
+			},
+			{
+				"name": "Project_Type_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Story_Point",
+				"type": "UTF8"
+			},
+			{
+				"name": "Status_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Resolution",
+				"type": "UTF8"
+			},
+			{
+				"name": "Created_Date_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Created_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Updated_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Updated_Date_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Resolution_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Resolution_Date_key",
+				"type": "UTF8"
+			},
+			{
+				"name": "Start_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "End_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "Sprint_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "End_Date_TZ",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_End_Date_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_End_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Start_Date_Key",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_Start_Date",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_End_Date_TZ",
+				"type": "UTF8"
+			},
+			{
+				"name": "New_End_Date_Key_TZ",
+				"type": "UTF8"
+			},
+			{
+				"name": "Priority_Name",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

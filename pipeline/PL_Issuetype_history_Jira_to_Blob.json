@@ -1,0 +1,154 @@
+{
+	"name": "PL_Issuetype_history_Jira_to_Blob",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@pipeline().parameters.Query",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_IssueType_History_Lookup",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@item().RestApi",
+									"type": "Expression"
+								},
+								"method": "GET",
+								"authentication": {
+									"type": "Basic",
+									"username": {
+										"value": "@pipeline().parameters.UserName",
+										"type": "Expression"
+									},
+									"password": {
+										"type": "SecureString",
+										"value": "**********"
+									}
+								}
+							}
+						},
+						{
+							"name": "Web2",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Web1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@item().blobRestApi",
+									"type": "Expression"
+								},
+								"method": "PUT",
+								"headers": {
+									"x-ms-blob-type": {
+										"value": "@pipeline().parameters.Header_Value",
+										"type": "Expression"
+									}
+								},
+								"body": {
+									"value": "@activity('Web1').output",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"Query": {
+				"type": "string",
+				"defaultValue": "select * from(    select rank () over( order by [key])  as RN, [Key] as IssueKey,'IssueHistory_'+ [Key] +'.json' as IssueFileName,'https://safefleet.atlassian.net/rest/api/3/issue/'+[Key]+'/changelog' as RestApi ,  'https://databistrg.blob.core.windows.net/test/'+'IssueHistory_'+ [Key] +'.json'+'?sp=racw&st=2023-06-29T06:17:16Z&se=2025-05-15T14:17:16Z&spr=https&sv=2022-11-02&sr=c&sig=%2B7kryfFPMVsgx4FvFpZ%2BRkMZ0Y9Q7ob9MfsTS745CP8%3D' as BlobRestApi, 'IssueHistory_'+ [Key] +'.csv' as IssueType_Sink_FileName   from Bug where Resolution_Date>='2023-01-01' and Resolution_Date<='2023-06-30' and Issue_Name in ('bug','improvement','story')    ) as A where RN >= 1 AND RN <= 10"
+			},
+			"UserName": {
+				"type": "string",
+				"defaultValue": "rama.veluri@global-csg.com"
+			},
+			"Header_Value": {
+				"type": "string",
+				"defaultValue": "BlockBlob"
+			}
+		},
+		"variables": {
+			"new": {
+				"type": "String"
+			},
+			"jsonfilename": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Issuetype_History"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-20T03:14:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

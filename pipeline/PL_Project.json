@@ -1,0 +1,333 @@
+{
+	"name": "PL_Project",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"description": "It Contains RestAPi and FileName for project ",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_Project_LookUP",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"description": "to get jira's raw data and store into blob storage",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Set_1_Jira_Api",
+							"description": "contains Jira RestApi",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "RestApi_Jira",
+								"value": {
+									"value": "@item().RestApi",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Web1",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Set_1_Jira_Api",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@variables('RestApi_Jira')",
+									"type": "Expression"
+								},
+								"method": "GET",
+								"authentication": {
+									"type": "Basic",
+									"username": "rama.veluri@global-csg.com",
+									"password": {
+										"type": "SecureString",
+										"value": "**********"
+									}
+								}
+							}
+						},
+						{
+							"name": "Set_2_Blob_1",
+							"description": "Blob RestApi Part1",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Web1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "RestApi_Blob_1",
+								"value": {
+									"value": "@pipeline().parameters.set_2",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set_3_Blob_2",
+							"description": "contains sink Dynamic filename ",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set_2_Blob_1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "RestApi_Blob_2",
+								"value": {
+									"value": "@item().FileName",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set_4_Blob_3",
+							"description": "Blob restapi last part",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set_3_Blob_2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "RestApi_Blob_3",
+								"value": {
+									"value": "@pipeline().parameters.set_4",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set_5_Blob_RestApi",
+							"description": "contains complete blob RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set_4_Blob_3",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Final_RestApi_Blob",
+								"value": {
+									"value": "@concat(variables('RestApi_Blob_1'),variables('RestApi_Blob_2'),variables('RestApi_Blob_3'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Web2",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Set_5_Blob_RestApi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@variables('Final_RestApi_Blob')",
+									"type": "Expression"
+								},
+								"method": "PUT",
+								"headers": {
+									"x-ms-blob-type": {
+										"value": "@pipeline().parameters.Header_Value",
+										"type": "Expression"
+									}
+								},
+								"body": {
+									"value": "@activity('Web1').output",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Data flow1",
+				"description": "to run Project Dataflow",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Project",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"set_2": {
+				"type": "string",
+				"defaultValue": "https://databistrg.blob.core.windows.net/monthlymetrics/Project/"
+			},
+			"set_4": {
+				"type": "string",
+				"defaultValue": "?sp=racw&st=2023-06-04T05:04:42Z&se=2030-05-10T13:04:42Z&spr=https&sv=2022-11-02&sr=c&sig=H0immbI7Gh4mRhibMr%2BAcA9ubWSRcdh4yb%2Fw2FJJ%2Fr4%3D"
+			},
+			"Header_Value": {
+				"type": "string",
+				"defaultValue": "BlockBlob"
+			}
+		},
+		"variables": {
+			"RestApi_Jira": {
+				"type": "String"
+			},
+			"RestApi_Blob_1": {
+				"type": "String"
+			},
+			"RestApi_Blob_2": {
+				"type": "String"
+			},
+			"RestApi_Blob_3": {
+				"type": "String"
+			},
+			"Final_RestApi_Blob": {
+				"type": "String"
+			},
+			"Velocity_restApi": {
+				"type": "String"
+			},
+			"Blob_RestApi_1": {
+				"type": "String"
+			},
+			"Blob_RestApi_2": {
+				"type": "String"
+			},
+			"Blob_RestApi_3": {
+				"type": "String"
+			},
+			"Final_Blob_RestApi": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Project"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-17T09:39:31Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

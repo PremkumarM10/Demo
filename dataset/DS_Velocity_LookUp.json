@@ -1,0 +1,39 @@
+{
+	"name": "DS_Velocity_LookUp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Velocity"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "velocity",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Power BI(Jira rest api's)) - Copy.xlsx",
+				"folderPath": "RestApi_xlsx",
+				"container": "monthlymetrics"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "ProjectName",
+				"type": "String"
+			},
+			{
+				"name": "RestApi",
+				"type": "String"
+			},
+			{
+				"name": "FileName",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

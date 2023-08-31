@@ -1,0 +1,767 @@
+{
+	"name": "PL_Bug_V1",
+	"properties": {
+		"activities": [
+			{
+				"name": "web_1_read The Jira RestApi",
+				"description": "To Know Total No_Of_Records present in RestApi",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().parameters.JiraRestApi",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"authentication": {
+						"type": "Basic",
+						"username": {
+							"value": "@pipeline().parameters.UserName",
+							"type": "Expression"
+						},
+						"password": {
+							"type": "SecureString",
+							"value": "**********"
+						}
+					}
+				}
+			},
+			{
+				"name": "Set1_to store Total  Value",
+				"description": "storing the total number of record's value ",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "web_1_read The Jira RestApi",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var1_Total_No_Of_RecordsValue",
+					"value": {
+						"value": "@string(activity('web_1_read The Jira RestApi').output.total)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set 2 is contains divided value",
+				"description": "divide the number of total record's / (by) 100.",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set1_to store Total  Value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var2_Divde_Total_No_Of_Records",
+					"value": {
+						"value": "@string(div(add(int(variables('Var1_Total_No_Of_RecordsValue')),99), 100))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEach for jira to blob",
+				"description": "going to loop throw the inner activity's based on the total record's divided value",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Set 2 is contains divided value",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@range(0,int(variables('Var2_Divde_Total_No_Of_Records')))",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Set 3 for store the first part of jira restapi",
+							"description": "this activity is used to store the first part of jirs's restapi",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var3_1st_Part_Of_Jiras_RestApi",
+								"value": {
+									"value": "@pipeline().parameters.set_3",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 5 for update the startAt value",
+							"description": "this activity is used to store the updated value for startAt",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 4 for store startAt value for jira RestApi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var4_Dynamic_StartAt_Value",
+								"value": {
+									"value": "@string(add(mul(item(),100),int(variables('Var5_Initial_StartAt_Value'))))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 6 store the last part of jira RestApi",
+							"description": "this activity is used to store the last part of jira's RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 5 for update the startAt value",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var6_LastPart_Of_Jiras_restApi",
+								"value": {
+									"value": "@pipeline().parameters.set_6",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 7 contain valid jira restapi",
+							"description": "this activity is used to concat all the part of RestApi and make it as a one valid RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 6 store the last part of jira RestApi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var7_Complete_Jira_Rest_Api",
+								"value": {
+									"value": "@concat(variables('Var3_1st_Part_Of_Jiras_RestApi'),variables('Var4_Dynamic_StartAt_Value'),variables('Var6_LastPart_Of_Jiras_restApi'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 4 for store startAt value for jira RestApi",
+							"description": "this activity is used to store the startAt value for jira's RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 3 for store the first part of jira restapi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var5_Initial_StartAt_Value",
+								"value": {
+									"value": "@string(int(0))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Web2 get data from RestApi",
+							"description": "to getting the data from RestApi Sequentially",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Set 7 contain valid jira restapi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@variables('Var7_Complete_Jira_Rest_Api')",
+									"type": "Expression"
+								},
+								"method": "GET",
+								"authentication": {
+									"type": "Basic",
+									"username": {
+										"value": "@pipeline().parameters.UserName",
+										"type": "Expression"
+									},
+									"password": {
+										"type": "SecureString",
+										"value": "**********"
+									}
+								}
+							}
+						},
+						{
+							"name": "Set 8 to store 1st part of blob restapi",
+							"description": "this activity is used to store 1'st part of blob's RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Web2 get data from RestApi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var8_1st_Part_Of_Blobs_RestApi",
+								"value": {
+									"value": "@pipeline().parameters.set_8",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 9 to store static perfix filename",
+							"description": "to store static prefix filename for each and every jira's rest api",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 8 to store 1st part of blob restapi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var9_Static_Prefix_FileName",
+								"value": {
+									"value": "@pipeline().parameters.set_9",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 10 to store dynamic suffix filename",
+							"description": "is used to store the suffix filename for jira's RestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 9 to store static perfix filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var10_Dynamic_Suffix_FileName",
+								"value": {
+									"value": "@concat(string(int(item())),'.json')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 11 contains valid destination filename",
+							"description": "this activity is used to concat the prefix and suffix filename",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 10 to store dynamic suffix filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var11_Complete_Sink_Filename",
+								"value": {
+									"value": "@concat(variables('Var9_Static_Prefix_FileName'),variables('Var10_Dynamic_Suffix_FileName'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 12 store last part of blob AestApi",
+							"description": "store the the last part of blob AestApi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 11 contains valid destination filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var12_2nd_Part_Of_Blobs_RestApi",
+								"value": {
+									"value": "@pipeline().parameters.set_12",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set 13 contains blobs complete restapi",
+							"description": "contain one valid blob restapi",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set 12 store last part of blob AestApi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var13_Complete_Blob_Rest_Api",
+								"value": {
+									"value": "@concat(variables('Var8_1st_Part_Of_Blobs_RestApi'),variables('Var11_Complete_Sink_Filename'),variables('Var12_2nd_Part_Of_Blobs_RestApi'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Web3 to load the data into blob storage acc",
+							"description": "this activity is used to store the data the data which is given by jira's RestApi.",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Set 13 contains blobs complete restapi",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@variables('Var13_Complete_Blob_Rest_Api')",
+									"type": "Expression"
+								},
+								"method": "PUT",
+								"headers": {
+									"x-ms-blob-type": {
+										"value": "@pipeline().parameters.Header_Value",
+										"type": "Expression"
+									}
+								},
+								"body": {
+									"value": "@activity('Web2 get data from RestApi').output",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "To Get Filenames",
+				"description": "getting the Source Filename For DataFlow",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "ForEach for jira to blob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_Bug_V1_Sourcefile",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEach Loop Throw The Dataflow",
+				"description": "loop throw the Dataflow for clean the json raw data",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "To Get Filenames",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('To Get Filenames').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Set_1_scr_Filename",
+							"description": "used to store the source filename for dataflow source",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var14_Scr_Filename_For_DF",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set_2_Sink Filename",
+							"description": "used to store the sink filename for dataflow for destination ",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set_1_scr_Filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "Var15_Sink_Filename_For_DF",
+								"value": {
+									"value": "@replace(variables('Var14_Scr_Filename_For_DF'),'.json','.csv')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Data flow1",
+							"description": "to clean the data dynamically",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [
+								{
+									"activity": "Set_2_Sink Filename",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataflow": {
+									"referenceName": "DF_Bug_V1_copy1",
+									"type": "DataFlowReference",
+									"parameters": {
+										"sink_Filename": {
+											"value": "'@{variables('Var15_Sink_Filename_For_DF')}'",
+											"type": "Expression"
+										}
+									},
+									"datasetParameters": {
+										"source1": {
+											"scr_Filename": {
+												"value": "@variables('Var14_Scr_Filename_For_DF')",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "merge the cleand csv format data files",
+				"description": "merge cleaned data files and make it one single file",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "ForEach Loop Throw The Dataflow",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false,
+							"prefix": {
+								"value": "@{pipeline().parameters.Prefix_Filename}",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_Bug_V1_Merge_Source",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_Bug_V1_Sink_Merge",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"UserName": {
+				"type": "string",
+				"defaultValue": "rama.veluri@global-csg.com"
+			},
+			"JiraRestApi": {
+				"type": "string",
+				"defaultValue": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt=0&maxResults=100"
+			},
+			"set_3": {
+				"type": "string",
+				"defaultValue": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt="
+			},
+			"set_6": {
+				"type": "string",
+				"defaultValue": "&maxResults=100"
+			},
+			"set_8": {
+				"type": "string",
+				"defaultValue": "https://databistrg.blob.core.windows.net/monthlymetrics/BugV1/"
+			},
+			"set_9": {
+				"type": "string",
+				"defaultValue": "Bug_"
+			},
+			"set_12": {
+				"type": "string",
+				"defaultValue": "?sp=racw&st=2023-06-04T05:04:42Z&se=2030-05-10T13:04:42Z&spr=https&sv=2022-11-02&sr=c&sig=H0immbI7Gh4mRhibMr%2BAcA9ubWSRcdh4yb%2Fw2FJJ%2Fr4%3D"
+			},
+			"Header_Value": {
+				"type": "string",
+				"defaultValue": "BlockBlob"
+			},
+			"Prefix_Filename": {
+				"type": "string",
+				"defaultValue": "Bug_V1_staging/Bug"
+			}
+		},
+		"variables": {
+			"Var1_Total_No_Of_RecordsValue": {
+				"type": "String"
+			},
+			"Var2_Divde_Total_No_Of_Records": {
+				"type": "String"
+			},
+			"Var3_1st_Part_Of_Jiras_RestApi": {
+				"type": "String"
+			},
+			"Var4_Dynamic_StartAt_Value": {
+				"type": "String"
+			},
+			"Var6_LastPart_Of_Jiras_restApi": {
+				"type": "String"
+			},
+			"Var7_Complete_Jira_Rest_Api": {
+				"type": "String"
+			},
+			"Var5_Initial_StartAt_Value": {
+				"type": "String"
+			},
+			"Var8_1st_Part_Of_Blobs_RestApi": {
+				"type": "String"
+			},
+			"Var9_Static_Prefix_FileName": {
+				"type": "String"
+			},
+			"Var10_Dynamic_Suffix_FileName": {
+				"type": "String"
+			},
+			"Var11_Complete_Sink_Filename": {
+				"type": "String"
+			},
+			"Var12_2nd_Part_Of_Blobs_RestApi": {
+				"type": "String"
+			},
+			"Var13_Complete_Blob_Rest_Api": {
+				"type": "String"
+			},
+			"Var14_Scr_Filename_For_DF": {
+				"type": "String"
+			},
+			"Var15_Sink_Filename_For_DF": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Monthly_Metrics_V1/Bug"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-08-01T09:32:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
