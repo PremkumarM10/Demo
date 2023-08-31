@@ -1,0 +1,3477 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "data-bi-adf"
+		},
+		"Self_Host_LS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Self_Host_LS'"
+		},
+		"SqlServer1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer1'",
+			"defaultValue": "Integrated Security=True;Data Source=Y22SBTP117\\SQLEXPRESS;Initial Catalog=Demo"
+		},
+		"SqlServer1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServer1'"
+		},
+		"SqlServer2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer2'"
+		},
+		"ls_postgre_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_postgre'"
+		},
+		"SqlServer1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "CREATIVE\\hemalatp"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_source_metrics_0_1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ser_name": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().ser_name",
+							"type": "Expression"
+						},
+						"folderPath": "BugV1",
+						"container": "monthlymetrics"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"expand": {
+							"type": "string"
+						},
+						"startAt": {
+							"type": "integer"
+						},
+						"maxResults": {
+							"type": "integer"
+						},
+						"total": {
+							"type": "integer"
+						},
+						"issues": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"expand": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									},
+									"self": {
+										"type": "string"
+									},
+									"key": {
+										"type": "string"
+									},
+									"fields": {
+										"type": "object",
+										"properties": {
+											"statuscategorychangedate": {
+												"type": "string"
+											},
+											"customfield_11441": {
+												"type": "null"
+											},
+											"customfield_11320": {
+												"type": "null"
+											},
+											"customfield_11440": {
+												"type": "null"
+											},
+											"fixVersions": {
+												"type": "array"
+											},
+											"customfield_11321": {
+												"type": "null"
+											},
+											"customfield_11443": {
+												"type": "null"
+											},
+											"customfield_11200": {
+												"type": "null"
+											},
+											"customfield_11322": {
+												"type": "null"
+											},
+											"customfield_11442": {
+												"type": "null"
+											},
+											"resolution": {
+												"type": "null"
+											},
+											"customfield_11323": {
+												"type": "null"
+											},
+											"customfield_11445": {
+												"type": "null"
+											},
+											"customfield_11444": {
+												"type": "null"
+											},
+											"customfield_11436": {
+												"type": "null"
+											},
+											"customfield_11435": {
+												"type": "null"
+											},
+											"customfield_11438": {
+												"type": "null"
+											},
+											"customfield_11317": {
+												"type": "null"
+											},
+											"customfield_11437": {
+												"type": "null"
+											},
+											"customfield_10900": {
+												"type": "string"
+											},
+											"customfield_11318": {
+												"type": "null"
+											},
+											"customfield_11319": {
+												"type": "null"
+											},
+											"customfield_11439": {
+												"type": "null"
+											},
+											"lastViewed": {
+												"type": "null"
+											},
+											"customfield_11390": {
+												"type": "null"
+											},
+											"customfield_11395": {
+												"type": "null"
+											},
+											"customfield_11394": {
+												"type": "null"
+											},
+											"customfield_11397": {
+												"type": "null"
+											},
+											"customfield_11396": {
+												"type": "null"
+											},
+											"customfield_11310": {
+												"type": "null"
+											},
+											"customfield_11432": {
+												"type": "null"
+											},
+											"priority": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11399": {
+												"type": "null"
+											},
+											"customfield_11431": {
+												"type": "null"
+											},
+											"customfield_11398": {
+												"type": "null"
+											},
+											"customfield_11312": {
+												"type": "null"
+											},
+											"customfield_11434": {
+												"type": "null"
+											},
+											"labels": {
+												"type": "array"
+											},
+											"customfield_11433": {
+												"type": "null"
+											},
+											"customfield_11425": {
+												"type": "null"
+											},
+											"customfield_11424": {
+												"type": "null"
+											},
+											"customfield_11427": {
+												"type": "null"
+											},
+											"customfield_11426": {
+												"type": "null"
+											},
+											"aggregatetimeoriginalestimate": {
+												"type": "null"
+											},
+											"customfield_11307": {
+												"type": "null"
+											},
+											"timeestimate": {
+												"type": "integer"
+											},
+											"customfield_11429": {
+												"type": "null"
+											},
+											"customfield_11308": {
+												"type": "array"
+											},
+											"customfield_11428": {
+												"type": "null"
+											},
+											"versions": {
+												"type": "array"
+											},
+											"customfield_11309": {
+												"type": "null"
+											},
+											"issuelinks": {
+												"type": "array"
+											},
+											"assignee": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"accountId": {
+														"type": "string"
+													},
+													"emailAddress": {
+														"type": "string"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													},
+													"displayName": {
+														"type": "string"
+													},
+													"active": {
+														"type": "boolean"
+													},
+													"timeZone": {
+														"type": "string"
+													},
+													"accountType": {
+														"type": "string"
+													}
+												}
+											},
+											"status": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"statusCategory": {
+														"type": "object",
+														"properties": {
+															"self": {
+																"type": "string"
+															},
+															"id": {
+																"type": "integer"
+															},
+															"key": {
+																"type": "string"
+															},
+															"colorName": {
+																"type": "string"
+															},
+															"name": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"components": {
+												"type": "array"
+											},
+											"customfield_11380": {
+												"type": "null"
+											},
+											"customfield_11382": {
+												"type": "null"
+											},
+											"customfield_11381": {
+												"type": "null"
+											},
+											"customfield_11384": {
+												"type": "null"
+											},
+											"customfield_11383": {
+												"type": "null"
+											},
+											"customfield_11386": {
+												"type": "null"
+											},
+											"customfield_11385": {
+												"type": "null"
+											},
+											"customfield_11421": {
+												"type": "array"
+											},
+											"customfield_11388": {
+												"type": "null"
+											},
+											"customfield_11420": {
+												"type": "null"
+											},
+											"customfield_11387": {
+												"type": "null"
+											},
+											"customfield_11423": {
+												"type": "null"
+											},
+											"customfield_10212": {
+												"type": "null"
+											},
+											"customfield_11422": {
+												"type": "null"
+											},
+											"customfield_11389": {
+												"type": "null"
+											},
+											"customfield_11414": {
+												"type": "null"
+											},
+											"customfield_11413": {
+												"type": "null"
+											},
+											"customfield_10601": {
+												"type": "null"
+											},
+											"customfield_11416": {
+												"type": "null"
+											},
+											"customfield_11415": {
+												"type": "null"
+											},
+											"customfield_11418": {
+												"type": "null"
+											},
+											"aggregatetimeestimate": {
+												"type": "integer"
+											},
+											"customfield_11417": {
+												"type": "null"
+											},
+											"customfield_11419": {
+												"type": "null"
+											},
+											"creator": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"accountId": {
+														"type": "string"
+													},
+													"emailAddress": {
+														"type": "string"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													},
+													"displayName": {
+														"type": "string"
+													},
+													"active": {
+														"type": "boolean"
+													},
+													"timeZone": {
+														"type": "string"
+													},
+													"accountType": {
+														"type": "string"
+													}
+												}
+											},
+											"subtasks": {
+												"type": "array"
+											},
+											"customfield_11371": {
+												"type": "null"
+											},
+											"customfield_11370": {
+												"type": "null"
+											},
+											"customfield_11373": {
+												"type": "null"
+											},
+											"customfield_11372": {
+												"type": "null"
+											},
+											"customfield_11375": {
+												"type": "null"
+											},
+											"reporter": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"accountId": {
+														"type": "string"
+													},
+													"emailAddress": {
+														"type": "string"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													},
+													"displayName": {
+														"type": "string"
+													},
+													"active": {
+														"type": "boolean"
+													},
+													"timeZone": {
+														"type": "string"
+													},
+													"accountType": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11374": {
+												"type": "null"
+											},
+											"aggregateprogress": {
+												"type": "object",
+												"properties": {
+													"progress": {
+														"type": "integer"
+													},
+													"total": {
+														"type": "integer"
+													},
+													"percent": {
+														"type": "integer"
+													}
+												}
+											},
+											"customfield_11410": {
+												"type": "null"
+											},
+											"customfield_11376": {
+												"type": "null"
+											},
+											"customfield_11379": {
+												"type": "null"
+											},
+											"customfield_11412": {
+												"type": "null"
+											},
+											"customfield_11411": {
+												"type": "null"
+											},
+											"customfield_11403": {
+												"type": "null"
+											},
+											"customfield_11369": {
+												"type": "null"
+											},
+											"customfield_11402": {
+												"type": "null"
+											},
+											"customfield_11405": {
+												"type": "null"
+											},
+											"customfield_11404": {
+												"type": "null"
+											},
+											"customfield_11407": {
+												"type": "null"
+											},
+											"customfield_11406": {
+												"type": "null"
+											},
+											"customfield_11409": {
+												"type": "null"
+											},
+											"customfield_11408": {
+												"type": "null"
+											},
+											"progress": {
+												"type": "object",
+												"properties": {
+													"progress": {
+														"type": "integer"
+													},
+													"total": {
+														"type": "integer"
+													},
+													"percent": {
+														"type": "integer"
+													}
+												}
+											},
+											"votes": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"votes": {
+														"type": "integer"
+													},
+													"hasVoted": {
+														"type": "boolean"
+													}
+												}
+											},
+											"issuetype": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"subtask": {
+														"type": "boolean"
+													},
+													"avatarId": {
+														"type": "integer"
+													},
+													"hierarchyLevel": {
+														"type": "integer"
+													}
+												}
+											},
+											"timespent": {
+												"type": "integer"
+											},
+											"customfield_11480": {
+												"type": "null"
+											},
+											"customfield_11362": {
+												"type": "null"
+											},
+											"customfield_11483": {
+												"type": "null"
+											},
+											"customfield_11361": {
+												"type": "null"
+											},
+											"project": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"key": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"projectTypeKey": {
+														"type": "string"
+													},
+													"simplified": {
+														"type": "boolean"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"customfield_11482": {
+												"type": "null"
+											},
+											"customfield_11000": {
+												"type": "null"
+											},
+											"customfield_11364": {
+												"type": "null"
+											},
+											"aggregatetimespent": {
+												"type": "integer"
+											},
+											"customfield_11366": {
+												"type": "null"
+											},
+											"customfield_11365": {
+												"type": "null"
+											},
+											"customfield_11368": {
+												"type": "null"
+											},
+											"customfield_11401": {
+												"type": "null"
+											},
+											"customfield_11400": {
+												"type": "null"
+											},
+											"customfield_11513": {
+												"type": "null"
+											},
+											"customfield_11479": {
+												"type": "string"
+											},
+											"customfield_11512": {
+												"type": "null"
+											},
+											"customfield_11515": {
+												"type": "null"
+											},
+											"customfield_10700": {
+												"type": "null"
+											},
+											"customfield_11514": {
+												"type": "null"
+											},
+											"customfield_10702": {
+												"type": "null"
+											},
+											"customfield_11517": {
+												"type": "null"
+											},
+											"resolutiondate": {
+												"type": "null"
+											},
+											"workratio": {
+												"type": "integer"
+											},
+											"watches": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"watchCount": {
+														"type": "integer"
+													},
+													"isWatching": {
+														"type": "boolean"
+													}
+												}
+											},
+											"created": {
+												"type": "string"
+											},
+											"customfield_11472": {
+												"type": "null"
+											},
+											"customfield_11471": {
+												"type": "string"
+											},
+											"customfield_11474": {
+												"type": "null"
+											},
+											"customfield_11352": {
+												"type": "null"
+											},
+											"customfield_11476": {
+												"type": "null"
+											},
+											"customfield_11475": {
+												"type": "null"
+											},
+											"customfield_11478": {
+												"type": "null"
+											},
+											"customfield_11502": {
+												"type": "null"
+											},
+											"customfield_11348": {
+												"type": "null"
+											},
+											"customfield_11469": {
+												"type": "null"
+											},
+											"customfield_11347": {
+												"type": "null"
+											},
+											"customfield_11504": {
+												"type": "null"
+											},
+											"customfield_11503": {
+												"type": "null"
+											},
+											"customfield_11505": {
+												"type": "null"
+											},
+											"customfield_11507": {
+												"type": "null"
+											},
+											"updated": {
+												"type": "string"
+											},
+											"timeoriginalestimate": {
+												"type": "null"
+											},
+											"description": {
+												"type": "null"
+											},
+											"customfield_11342": {
+												"type": "null"
+											},
+											"customfield_11100": {
+												"type": "null"
+											},
+											"customfield_10012": {
+												"type": "string"
+											},
+											"customfield_11343": {
+												"type": "null"
+											},
+											"customfield_11345": {
+												"type": "null"
+											},
+											"customfield_11337": {
+												"type": "null"
+											},
+											"customfield_10005": {
+												"type": "null"
+											},
+											"customfield_11339": {
+												"type": "null"
+											},
+											"security": {
+												"type": "null"
+											},
+											"customfield_10007": {
+												"type": "null"
+											},
+											"customfield_11338": {
+												"type": "null"
+											},
+											"customfield_10800": {
+												"type": "object",
+												"properties": {
+													"hasEpicLinkFieldDependency": {
+														"type": "boolean"
+													},
+													"showField": {
+														"type": "boolean"
+													},
+													"nonEditableReason": {
+														"type": "object",
+														"properties": {
+															"reason": {
+																"type": "string"
+															},
+															"message": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"customfield_10009": {
+												"type": "null"
+											},
+											"summary": {
+												"type": "string"
+											},
+											"customfield_11450": {
+												"type": "null"
+											},
+											"customfield_11331": {
+												"type": "null"
+											},
+											"customfield_11452": {
+												"type": "null"
+											},
+											"customfield_11451": {
+												"type": "null"
+											},
+											"customfield_11454": {
+												"type": "null"
+											},
+											"customfield_11453": {
+												"type": "null"
+											},
+											"customfield_11455": {
+												"type": "null"
+											},
+											"customfield_10004": {
+												"type": "null"
+											},
+											"customfield_10400": {
+												"type": "null"
+											},
+											"customfield_11447": {
+												"type": "null"
+											},
+											"customfield_11325": {
+												"type": "null"
+											},
+											"customfield_11446": {
+												"type": "null"
+											},
+											"customfield_11449": {
+												"type": "null"
+											},
+											"environment": {
+												"type": "null"
+											},
+											"customfield_11448": {
+												"type": "null"
+											},
+											"duedate": {
+												"type": "null"
+											}
+										}
+									}
+								}
+							}
+						},
+						"ADFWebActivityResponseHeaders": {
+							"type": "object",
+							"properties": {
+								"Timing-Allow-Origin": {
+									"type": "string"
+								},
+								"X-Arequestid": {
+									"type": "string"
+								},
+								"X-Aaccountid": {
+									"type": "string"
+								},
+								"Vary": {
+									"type": "string"
+								},
+								"X-Content-Type-Options": {
+									"type": "string"
+								},
+								"X-Xss-Protection": {
+									"type": "string"
+								},
+								"Atl-Traceid": {
+									"type": "string"
+								},
+								"Report-To": {
+									"type": "string"
+								},
+								"Nel": {
+									"type": "string"
+								},
+								"Strict-Transport-Security": {
+									"type": "string"
+								},
+								"Transfer-Encoding": {
+									"type": "string"
+								},
+								"Cache-Control": {
+									"type": "string"
+								},
+								"Date": {
+									"type": "string"
+								},
+								"Set-Cookie": {
+									"type": "string"
+								},
+								"Server": {
+									"type": "string"
+								},
+								"Content-Type": {
+									"type": "string"
+								}
+							}
+						},
+						"effectiveIntegrationRuntime": {
+							"type": "string"
+						},
+						"executionDuration": {
+							"type": "integer"
+						},
+						"durationInQueue": {
+							"type": "object",
+							"properties": {
+								"integrationRuntimeQueue": {
+									"type": "integer"
+								}
+							}
+						},
+						"billingReference": {
+							"type": "object",
+							"properties": {
+								"activityType": {
+									"type": "string"
+								},
+								"billableDuration": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"meterType": {
+												"type": "string"
+											},
+											"duration": {
+												"type": "number"
+											},
+											"unit": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Issuetype_History2-4.csv",
+						"container": "hema"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Id",
+						"type": "String"
+					},
+					{
+						"name": "Key",
+						"type": "String"
+					},
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "From_String",
+						"type": "String"
+					},
+					{
+						"name": "To_String",
+						"type": "String"
+					},
+					{
+						"name": "Old_Created_Date",
+						"type": "String"
+					},
+					{
+						"name": "New_Creatd_Date",
+						"type": "String"
+					},
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Time",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Bug_V1_staging",
+						"container": "monthlymetrics"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_bug_v1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"scr_Filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().scr_Filename",
+							"type": "Expression"
+						},
+						"folderPath": "BugV1",
+						"container": "monthlymetrics"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"expand": {
+							"type": "string"
+						},
+						"startAt": {
+							"type": "integer"
+						},
+						"maxResults": {
+							"type": "integer"
+						},
+						"total": {
+							"type": "integer"
+						},
+						"issues": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"expand": {
+										"type": "string"
+									},
+									"id": {
+										"type": "string"
+									},
+									"self": {
+										"type": "string"
+									},
+									"key": {
+										"type": "string"
+									},
+									"fields": {
+										"type": "object",
+										"properties": {
+											"statuscategorychangedate": {
+												"type": "string"
+											},
+											"customfield_11441": {
+												"type": "null"
+											},
+											"customfield_11320": {
+												"type": "null"
+											},
+											"fixVersions": {
+												"type": "array"
+											},
+											"customfield_11440": {
+												"type": "null"
+											},
+											"customfield_11443": {
+												"type": "null"
+											},
+											"customfield_11200": {
+												"type": "null"
+											},
+											"customfield_11321": {
+												"type": "null"
+											},
+											"customfield_11322": {
+												"type": "null"
+											},
+											"resolution": {
+												"type": "null"
+											},
+											"customfield_11442": {
+												"type": "null"
+											},
+											"customfield_11323": {
+												"type": "null"
+											},
+											"customfield_11445": {
+												"type": "null"
+											},
+											"customfield_11444": {
+												"type": "null"
+											},
+											"customfield_11436": {
+												"type": "null"
+											},
+											"customfield_11435": {
+												"type": "null"
+											},
+											"customfield_11438": {
+												"type": "null"
+											},
+											"customfield_11437": {
+												"type": "null"
+											},
+											"customfield_11317": {
+												"type": "null"
+											},
+											"customfield_10900": {
+												"type": "string"
+											},
+											"customfield_11318": {
+												"type": "null"
+											},
+											"customfield_11439": {
+												"type": "null"
+											},
+											"customfield_11319": {
+												"type": "null"
+											},
+											"lastViewed": {
+												"type": "null"
+											},
+											"customfield_11390": {
+												"type": "null"
+											},
+											"customfield_11395": {
+												"type": "null"
+											},
+											"customfield_11394": {
+												"type": "null"
+											},
+											"customfield_11397": {
+												"type": "null"
+											},
+											"customfield_11396": {
+												"type": "null"
+											},
+											"priority": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11399": {
+												"type": "null"
+											},
+											"customfield_11310": {
+												"type": "null"
+											},
+											"customfield_11432": {
+												"type": "null"
+											},
+											"customfield_11398": {
+												"type": "null"
+											},
+											"customfield_11431": {
+												"type": "null"
+											},
+											"customfield_11312": {
+												"type": "null"
+											},
+											"customfield_11434": {
+												"type": "null"
+											},
+											"customfield_11433": {
+												"type": "null"
+											},
+											"labels": {
+												"type": "array"
+											},
+											"customfield_11425": {
+												"type": "null"
+											},
+											"customfield_11424": {
+												"type": "null"
+											},
+											"customfield_11427": {
+												"type": "null"
+											},
+											"customfield_11426": {
+												"type": "null"
+											},
+											"aggregatetimeoriginalestimate": {
+												"type": "null"
+											},
+											"customfield_11429": {
+												"type": "null"
+											},
+											"customfield_11307": {
+												"type": "null"
+											},
+											"timeestimate": {
+												"type": "null"
+											},
+											"versions": {
+												"type": "array"
+											},
+											"customfield_11428": {
+												"type": "null"
+											},
+											"customfield_11308": {
+												"type": "array"
+											},
+											"customfield_11309": {
+												"type": "null"
+											},
+											"issuelinks": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"id": {
+															"type": "string"
+														},
+														"self": {
+															"type": "string"
+														},
+														"type": {
+															"type": "object",
+															"properties": {
+																"id": {
+																	"type": "string"
+																},
+																"name": {
+																	"type": "string"
+																},
+																"inward": {
+																	"type": "string"
+																},
+																"outward": {
+																	"type": "string"
+																},
+																"self": {
+																	"type": "string"
+																}
+															}
+														},
+														"outwardIssue": {
+															"type": "object",
+															"properties": {
+																"id": {
+																	"type": "string"
+																},
+																"key": {
+																	"type": "string"
+																},
+																"self": {
+																	"type": "string"
+																},
+																"fields": {
+																	"type": "object",
+																	"properties": {
+																		"summary": {
+																			"type": "string"
+																		},
+																		"status": {
+																			"type": "object",
+																			"properties": {
+																				"self": {
+																					"type": "string"
+																				},
+																				"description": {
+																					"type": "string"
+																				},
+																				"iconUrl": {
+																					"type": "string"
+																				},
+																				"name": {
+																					"type": "string"
+																				},
+																				"id": {
+																					"type": "string"
+																				},
+																				"statusCategory": {
+																					"type": "object",
+																					"properties": {
+																						"self": {
+																							"type": "string"
+																						},
+																						"id": {
+																							"type": "integer"
+																						},
+																						"key": {
+																							"type": "string"
+																						},
+																						"colorName": {
+																							"type": "string"
+																						},
+																						"name": {
+																							"type": "string"
+																						}
+																					}
+																				}
+																			}
+																		},
+																		"priority": {
+																			"type": "object",
+																			"properties": {
+																				"self": {
+																					"type": "string"
+																				},
+																				"iconUrl": {
+																					"type": "string"
+																				},
+																				"name": {
+																					"type": "string"
+																				},
+																				"id": {
+																					"type": "string"
+																				}
+																			}
+																		},
+																		"issuetype": {
+																			"type": "object",
+																			"properties": {
+																				"self": {
+																					"type": "string"
+																				},
+																				"id": {
+																					"type": "string"
+																				},
+																				"description": {
+																					"type": "string"
+																				},
+																				"iconUrl": {
+																					"type": "string"
+																				},
+																				"name": {
+																					"type": "string"
+																				},
+																				"subtask": {
+																					"type": "boolean"
+																				},
+																				"avatarId": {
+																					"type": "integer"
+																				},
+																				"hierarchyLevel": {
+																					"type": "integer"
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											},
+											"assignee": {
+												"type": "null"
+											},
+											"status": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"statusCategory": {
+														"type": "object",
+														"properties": {
+															"self": {
+																"type": "string"
+															},
+															"id": {
+																"type": "integer"
+															},
+															"key": {
+																"type": "string"
+															},
+															"colorName": {
+																"type": "string"
+															},
+															"name": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"components": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"self": {
+															"type": "string"
+														},
+														"id": {
+															"type": "string"
+														},
+														"name": {
+															"type": "string"
+														}
+													}
+												}
+											},
+											"customfield_11380": {
+												"type": "null"
+											},
+											"customfield_11382": {
+												"type": "null"
+											},
+											"customfield_11381": {
+												"type": "null"
+											},
+											"customfield_11384": {
+												"type": "null"
+											},
+											"customfield_11383": {
+												"type": "null"
+											},
+											"customfield_11386": {
+												"type": "null"
+											},
+											"customfield_11385": {
+												"type": "null"
+											},
+											"customfield_11388": {
+												"type": "null"
+											},
+											"customfield_11421": {
+												"type": "array"
+											},
+											"customfield_11387": {
+												"type": "null"
+											},
+											"customfield_11420": {
+												"type": "null"
+											},
+											"customfield_10212": {
+												"type": "null"
+											},
+											"customfield_11423": {
+												"type": "null"
+											},
+											"customfield_11422": {
+												"type": "null"
+											},
+											"customfield_11389": {
+												"type": "null"
+											},
+											"customfield_11414": {
+												"type": "null"
+											},
+											"customfield_11413": {
+												"type": "null"
+											},
+											"customfield_11416": {
+												"type": "null"
+											},
+											"customfield_10601": {
+												"type": "null"
+											},
+											"customfield_11415": {
+												"type": "null"
+											},
+											"customfield_11418": {
+												"type": "null"
+											},
+											"aggregatetimeestimate": {
+												"type": "null"
+											},
+											"customfield_11417": {
+												"type": "null"
+											},
+											"customfield_11419": {
+												"type": "null"
+											},
+											"creator": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"accountId": {
+														"type": "string"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													},
+													"displayName": {
+														"type": "string"
+													},
+													"active": {
+														"type": "boolean"
+													},
+													"timeZone": {
+														"type": "string"
+													},
+													"accountType": {
+														"type": "string"
+													}
+												}
+											},
+											"subtasks": {
+												"type": "array"
+											},
+											"customfield_11371": {
+												"type": "null"
+											},
+											"customfield_11370": {
+												"type": "null"
+											},
+											"customfield_11373": {
+												"type": "null"
+											},
+											"customfield_11372": {
+												"type": "null"
+											},
+											"reporter": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"accountId": {
+														"type": "string"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													},
+													"displayName": {
+														"type": "string"
+													},
+													"active": {
+														"type": "boolean"
+													},
+													"timeZone": {
+														"type": "string"
+													},
+													"accountType": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11375": {
+												"type": "null"
+											},
+											"customfield_11374": {
+												"type": "null"
+											},
+											"aggregateprogress": {
+												"type": "object",
+												"properties": {
+													"progress": {
+														"type": "integer"
+													},
+													"total": {
+														"type": "integer"
+													}
+												}
+											},
+											"customfield_11410": {
+												"type": "null"
+											},
+											"customfield_11376": {
+												"type": "null"
+											},
+											"customfield_11412": {
+												"type": "null"
+											},
+											"customfield_11379": {
+												"type": "null"
+											},
+											"customfield_11411": {
+												"type": "null"
+											},
+											"customfield_11403": {
+												"type": "null"
+											},
+											"customfield_11523": {
+												"type": "null"
+											},
+											"customfield_11369": {
+												"type": "null"
+											},
+											"customfield_11402": {
+												"type": "null"
+											},
+											"customfield_11405": {
+												"type": "null"
+											},
+											"customfield_11404": {
+												"type": "null"
+											},
+											"customfield_11407": {
+												"type": "null"
+											},
+											"customfield_11406": {
+												"type": "null"
+											},
+											"customfield_11409": {
+												"type": "null"
+											},
+											"customfield_11408": {
+												"type": "null"
+											},
+											"progress": {
+												"type": "object",
+												"properties": {
+													"progress": {
+														"type": "integer"
+													},
+													"total": {
+														"type": "integer"
+													}
+												}
+											},
+											"votes": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"votes": {
+														"type": "integer"
+													},
+													"hasVoted": {
+														"type": "boolean"
+													}
+												}
+											},
+											"issuetype": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"description": {
+														"type": "string"
+													},
+													"iconUrl": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"subtask": {
+														"type": "boolean"
+													},
+													"avatarId": {
+														"type": "integer"
+													},
+													"hierarchyLevel": {
+														"type": "integer"
+													}
+												}
+											},
+											"timespent": {
+												"type": "null"
+											},
+											"customfield_11480": {
+												"type": "null"
+											},
+											"customfield_11483": {
+												"type": "null"
+											},
+											"customfield_11362": {
+												"type": "null"
+											},
+											"customfield_11482": {
+												"type": "null"
+											},
+											"project": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													},
+													"key": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"projectTypeKey": {
+														"type": "string"
+													},
+													"simplified": {
+														"type": "boolean"
+													},
+													"avatarUrls": {
+														"type": "object",
+														"properties": {
+															"48x48": {
+																"type": "string"
+															},
+															"24x24": {
+																"type": "string"
+															},
+															"16x16": {
+																"type": "string"
+															},
+															"32x32": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"customfield_11361": {
+												"type": "null"
+											},
+											"customfield_11000": {
+												"type": "null"
+											},
+											"customfield_11364": {
+												"type": "null"
+											},
+											"aggregatetimespent": {
+												"type": "null"
+											},
+											"customfield_11366": {
+												"type": "null"
+											},
+											"customfield_11365": {
+												"type": "null"
+											},
+											"customfield_11401": {
+												"type": "null"
+											},
+											"customfield_11522": {
+												"type": "null"
+											},
+											"customfield_11368": {
+												"type": "null"
+											},
+											"customfield_11400": {
+												"type": "null"
+											},
+											"customfield_11521": {
+												"type": "null"
+											},
+											"customfield_11513": {
+												"type": "null"
+											},
+											"customfield_11479": {
+												"type": "null"
+											},
+											"customfield_11512": {
+												"type": "null"
+											},
+											"customfield_10700": {
+												"type": "null"
+											},
+											"customfield_11515": {
+												"type": "null"
+											},
+											"customfield_11514": {
+												"type": "null"
+											},
+											"customfield_10702": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"value": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11517": {
+												"type": "null"
+											},
+											"customfield_10703": {
+												"type": "null"
+											},
+											"resolutiondate": {
+												"type": "null"
+											},
+											"customfield_11519": {
+												"type": "null"
+											},
+											"workratio": {
+												"type": "integer"
+											},
+											"watches": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"watchCount": {
+														"type": "integer"
+													},
+													"isWatching": {
+														"type": "boolean"
+													}
+												}
+											},
+											"created": {
+												"type": "string"
+											},
+											"customfield_11472": {
+												"type": "null"
+											},
+											"customfield_11471": {
+												"type": "null"
+											},
+											"customfield_11474": {
+												"type": "null"
+											},
+											"customfield_11352": {
+												"type": "null"
+											},
+											"customfield_11476": {
+												"type": "null"
+											},
+											"customfield_11475": {
+												"type": "null"
+											},
+											"customfield_11478": {
+												"type": "null"
+											},
+											"customfield_11469": {
+												"type": "null"
+											},
+											"customfield_11348": {
+												"type": "null"
+											},
+											"customfield_11502": {
+												"type": "null"
+											},
+											"customfield_11347": {
+												"type": "null"
+											},
+											"customfield_11504": {
+												"type": "null"
+											},
+											"customfield_11503": {
+												"type": "null"
+											},
+											"customfield_11505": {
+												"type": "null"
+											},
+											"customfield_11507": {
+												"type": "null"
+											},
+											"updated": {
+												"type": "string"
+											},
+											"timeoriginalestimate": {
+												"type": "null"
+											},
+											"description": {
+												"type": "string"
+											},
+											"customfield_11342": {
+												"type": "object",
+												"properties": {
+													"self": {
+														"type": "string"
+													},
+													"value": {
+														"type": "string"
+													},
+													"id": {
+														"type": "string"
+													}
+												}
+											},
+											"customfield_11100": {
+												"type": "null"
+											},
+											"customfield_10012": {
+												"type": "string"
+											},
+											"customfield_11343": {
+												"type": "null"
+											},
+											"customfield_11345": {
+												"type": "null"
+											},
+											"customfield_10005": {
+												"type": "null"
+											},
+											"customfield_11337": {
+												"type": "null"
+											},
+											"customfield_11339": {
+												"type": "null"
+											},
+											"customfield_10007": {
+												"type": "null"
+											},
+											"security": {
+												"type": "null"
+											},
+											"customfield_11338": {
+												"type": "null"
+											},
+											"customfield_10800": {
+												"type": "object",
+												"properties": {
+													"hasEpicLinkFieldDependency": {
+														"type": "boolean"
+													},
+													"showField": {
+														"type": "boolean"
+													},
+													"nonEditableReason": {
+														"type": "object",
+														"properties": {
+															"reason": {
+																"type": "string"
+															},
+															"message": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											},
+											"customfield_10009": {
+												"type": "null"
+											},
+											"summary": {
+												"type": "string"
+											},
+											"customfield_11450": {
+												"type": "null"
+											},
+											"customfield_11452": {
+												"type": "null"
+											},
+											"customfield_11331": {
+												"type": "null"
+											},
+											"customfield_11451": {
+												"type": "null"
+											},
+											"customfield_11454": {
+												"type": "null"
+											},
+											"customfield_11453": {
+												"type": "null"
+											},
+											"customfield_11455": {
+												"type": "null"
+											},
+											"customfield_10400": {
+												"type": "null"
+											},
+											"customfield_10004": {
+												"type": "null"
+											},
+											"customfield_11447": {
+												"type": "null"
+											},
+											"customfield_11325": {
+												"type": "null"
+											},
+											"customfield_11446": {
+												"type": "null"
+											},
+											"customfield_11449": {
+												"type": "null"
+											},
+											"environment": {
+												"type": "null"
+											},
+											"customfield_11448": {
+												"type": "null"
+											},
+											"duedate": {
+												"type": "null"
+											}
+										}
+									}
+								}
+							}
+						},
+						"ADFWebActivityResponseHeaders": {
+							"type": "object",
+							"properties": {
+								"Timing-Allow-Origin": {
+									"type": "string"
+								},
+								"X-Arequestid": {
+									"type": "string"
+								},
+								"X-Aaccountid": {
+									"type": "string"
+								},
+								"Vary": {
+									"type": "string"
+								},
+								"X-Content-Type-Options": {
+									"type": "string"
+								},
+								"X-Xss-Protection": {
+									"type": "string"
+								},
+								"Atl-Traceid": {
+									"type": "string"
+								},
+								"Report-To": {
+									"type": "string"
+								},
+								"Nel": {
+									"type": "string"
+								},
+								"Strict-Transport-Security": {
+									"type": "string"
+								},
+								"Transfer-Encoding": {
+									"type": "string"
+								},
+								"Cache-Control": {
+									"type": "string"
+								},
+								"Date": {
+									"type": "string"
+								},
+								"Set-Cookie": {
+									"type": "string"
+								},
+								"Server": {
+									"type": "string"
+								},
+								"Content-Type": {
+									"type": "string"
+								}
+							}
+						},
+						"effectiveIntegrationRuntime": {
+							"type": "string"
+						},
+						"executionDuration": {
+							"type": "integer"
+						},
+						"durationInQueue": {
+							"type": "object",
+							"properties": {
+								"integrationRuntimeQueue": {
+									"type": "integer"
+								}
+							}
+						},
+						"billingReference": {
+							"type": "object",
+							"properties": {
+								"activityType": {
+									"type": "string"
+								},
+								"billableDuration": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"meterType": {
+												"type": "string"
+											},
+											"duration": {
+												"type": "number"
+											},
+											"unit": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Self_Host_LS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('Self_Host_LS_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHost-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer1_connectionString')]",
+					"userName": "[parameters('SqlServer1_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SqlServer1_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "Selfhosted-IR-h",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer2_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHost-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_postgre')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "PostgreSql",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_postgre_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHost-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_DimTable')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Parquet_DimTable",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Parquet_Dim_Dest",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"childitems": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Dimtable"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-04T12:24:29Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Validation_prem_copy4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "web_1_read The Jira RestApi",
+						"description": "To Know Total No_Of_Records present in RestApi",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "var_1_EX_Start",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt=0&maxResults=100",
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "Basic",
+								"username": "rama.veluri@global-csg.com",
+								"password": {
+									"type": "SecureString",
+									"value": "**********"
+								}
+							}
+						}
+					},
+					{
+						"name": "var_2_total_no_of_rec",
+						"description": "to store the total number of record value",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "web_1_read The Jira RestApi",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "record_from restapi",
+							"value": {
+								"value": "@string(activity('web_1_read The Jira RestApi').output.total)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Lookup_1_read_file",
+						"description": "read the cleaned data parquet file",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "var_2_total_no_of_rec",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "var_3_Total_no_of_rec",
+						"description": "store total no of record's from the cleaned file",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Lookup_1_read_file",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "record_from_File",
+							"value": {
+								"value": "@string(activity('Lookup_1_read_file').output.count)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_6_to_store_date",
+						"description": "to store the execution date",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Fetching invavlid_duplicate records",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "date",
+							"value": {
+								"value": "@string(utcnow())",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_1_EX_Start",
+						"description": "PL_execution starting time",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PL_startTime",
+							"value": {
+								"value": "@convertTimeZone(utcnow(), 'UTC', 'India Standard Time')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Collecting Error Details",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "var_6_to_store_date",
+								"dependencyConditions": [
+									"Skipped",
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Error_Detail",
+							"value": {
+								"value": "@concat(\n    replace(coalesce(activity('var_1_EX_Start')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('web_1_read The Jira RestApi')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_2_total_no_of_rec')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('Lookup_1_read_file')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_3_Total_no_of_rec')?.Error?.message, ''), '''', '\"'),\n    ' | ',\n    replace(coalesce(activity('var_6_to_store_date')?.Error?.message, ''), '''', '\"'),\n    ' | '\n)\n",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "var_8_PL_end_Time_copy1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "Self_Host_LS",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": {
+										"value": "insert into PL_Logs values(\n    '@{pipeline().DataFactory}',\n    '@{pipeline().Pipeline}',\n    '@{pipeline().RunId}',\n    '@{variables('record_from restapi')}',\n    '@{variables('record_from_File')}',\n    '@{variables('Invalid_Records')}',\n    '@{string('Bug')}',\n    '@{pipeline().TriggerId}',\n    '@{pipeline().TriggerName}',\n    '@{pipeline().TriggerTime}',\n    '@{pipeline().TriggerType}',\n    '@{variables('date')}',\n    '@{variables('PL_startTime')}',\n    '@{variables('PL_EndTime')}',\nconvert(varchar(8),dateadd(second,DATEDIFF(SECOND,'@{variables('PL_startTime')}', '@{variables('PL_EndTime')}'),0),108),\n'@{variables('PL_status')}',\n'@{variables('Error_Detail')}')",
+										"type": "Expression"
+									}
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "var_8_PL_end_Time_copy1",
+						"description": "PL execution ending time",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PL_EndTime",
+							"value": {
+								"value": "@convertTimeZone(utcnow(), 'UTC', 'India Standard Time')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Collecting Error Details",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Pl Status",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					},
+					{
+						"name": "Pl Status",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "var_6_to_store_date",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PL_status",
+							"value": "Success"
+						}
+					},
+					{
+						"name": "Fetching invavlid_duplicate records",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "var_3_Total_no_of_rec",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Invalid_Records",
+							"value": {
+								"value": "@{string(sub(int(variables('record_from restapi')), int(variables('record_from_File'))))} records are duplicate or invalid recordsss\n",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"record_from restapi": {
+						"type": "String"
+					},
+					"record_from_File": {
+						"type": "String"
+					},
+					"date": {
+						"type": "String"
+					},
+					"PL_startTime": {
+						"type": "String"
+					},
+					"PL_EndTime": {
+						"type": "String"
+					},
+					"utc_time": {
+						"type": "String"
+					},
+					"time": {
+						"type": "String"
+					},
+					"Error_Detail": {
+						"type": "String",
+						"defaultValue": "null"
+					},
+					"PL_status": {
+						"type": "String",
+						"defaultValue": "Failed"
+					},
+					"Invalid_Records": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "hema"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-26T08:54:54Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_IssueType_History_Lookup')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Issuetype_History_Csv_SQLDB_Output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Issuetype_History"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Issuetype_History_top_100')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Project_SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Project"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Project"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Velocity_SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Velocity"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Velocity"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_bug_SQLDB_Sink_V1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Bug"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PostgreSql')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_postgre",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "PostgreSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_postgre')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Self_Host_LS",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Self_Host_LS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bug_V1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_source_metrics_0_1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_sink_metrics_0_1",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						},
+						{
+							"name": "flatten2"
+						},
+						{
+							"name": "flatten3"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "aggregate2"
+						},
+						{
+							"name": "aggregate3"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "derivedColumn3"
+						},
+						{
+							"name": "derivedColumn4"
+						},
+						{
+							"name": "derivedColumn5"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     Sink_FileName as string",
+						"}",
+						"source(output(",
+						"          ADFWebActivityResponseHeaders as ({Atl-Traceid} as string, {Cache-Control} as string, {Content-Type} as string, Date as string, Nel as string, {Report-To} as string, Server as string, {Set-Cookie} as string, {Strict-Transport-Security} as string, {Timing-Allow-Origin} as string, {Transfer-Encoding} as string, Vary as string, {X-Aaccountid} as string, {X-Arequestid} as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string),",
+						"          billingReference as (activityType as string, billableDuration as (duration as double, meterType as string, unit as string)[]),",
+						"          durationInQueue as (integrationRuntimeQueue as boolean),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as short,",
+						"          expand as string,",
+						"          issues as (expand as string, fields as (aggregateprogress as (percent as short, progress as integer, total as integer), aggregatetimeestimate as boolean, aggregatetimeoriginalestimate as string, aggregatetimespent as integer, assignee as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), components as (id as short, name as string, self as string)[], created as string, creator as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), customfield_10004 as string, customfield_10005 as double, customfield_10007 as (boardId as short, completeDate as string, endDate as timestamp, goal as string, id as short, name as string, startDate as string, state as string)[], customfield_10009 as string, customfield_10012 as string, customfield_10212 as string, customfield_10400 as (id as short, self as string, value as string), customfield_10601 as string, customfield_10700 as string, customfield_10702 as (id as short, self as string, value as string), customfield_10703 as string, customfield_10800 as (hasEpicLinkFieldDependency as boolean, nonEditableReason as (message as string, reason as string), showField as boolean), customfield_10900 as string, customfield_11000 as string, customfield_11100 as string, customfield_11200 as string, customfield_11307 as string, customfield_11308 as string[], customfield_11309 as string, customfield_11310 as string, customfield_11312 as string, customfield_11315 as string, customfield_11317 as string, customfield_11318 as string, customfield_11319 as string, customfield_11320 as string, customfield_11321 as string, customfield_11322 as string, customfield_11323 as string, customfield_11325 as string, customfield_11331 as string, customfield_11337 as string, customfield_11338 as (id as short, self as string, value as string), customfield_11339 as string, customfield_11341 as string, customfield_11342 as (id as short, self as string, value as string), customfield_11343 as string, customfield_11345 as string, customfield_11347 as string, customfield_11348 as string, customfield_11350 as (id as short, self as string, value as string), customfield_11352 as string, customfield_11361 as string, customfield_11362 as string, customfield_11364 as string, customfield_11365 as string, customfield_11366 as string, customfield_11368 as string, customfield_11369 as string, customfield_11370 as string, customfield_11371 as string, customfield_11372 as string, customfield_11373 as string, customfield_11374 as string, customfield_11375 as string, customfield_11376 as string, customfield_11379 as string, customfield_11380 as string, customfield_11381 as string, customfield_11382 as string, customfield_11383 as string, customfield_11384 as string, customfield_11385 as string, customfield_11386 as string, customfield_11387 as string, customfield_11388 as string, customfield_11389 as string, customfield_11390 as string, customfield_11394 as string, customfield_11395 as string, customfield_11396 as string, customfield_11397 as string, customfield_11398 as string, customfield_11399 as string, customfield_11400 as string, customfield_11401 as string, customfield_11402 as string, customfield_11403 as string, customfield_11404 as string, customfield_11405 as string, customfield_11406 as string, customfield_11407 as string, customfield_11408 as string, customfield_11409 as string, customfield_11410 as string, customfield_11411 as string, customfield_11412 as string, customfield_11413 as string, customfield_11414 as string, customfield_11415 as string, customfield_11416 as string, customfield_11417 as string, customfield_11418 as string, customfield_11419 as string, customfield_11420 as string, customfield_11421 as string[], customfield_11422 as string, customfield_11423 as string, customfield_11424 as string, customfield_11425 as string, customfield_11426 as string, customfield_11427 as string, customfield_11428 as string, customfield_11429 as string, customfield_11431 as string, customfield_11432 as string, customfield_11433 as string, customfield_11434 as string, customfield_11435 as string, customfield_11436 as string, customfield_11437 as string, customfield_11438 as string, customfield_11439 as string, customfield_11440 as string, customfield_11441 as string, customfield_11442 as string, customfield_11443 as string, customfield_11444 as string, customfield_11445 as string, customfield_11446 as string, customfield_11447 as string, customfield_11448 as string, customfield_11449 as string, customfield_11450 as string, customfield_11451 as string, customfield_11452 as string, customfield_11453 as string, customfield_11454 as string, customfield_11455 as string, customfield_11469 as string, customfield_11471 as string, customfield_11472 as string, customfield_11474 as string, customfield_11475 as string, customfield_11476 as string, customfield_11478 as string, customfield_11479 as string, customfield_11480 as string, customfield_11482 as string, customfield_11483 as string, customfield_11502 as string, customfield_11503 as string, customfield_11504 as string, customfield_11505 as string, customfield_11507 as string, customfield_11512 as string, customfield_11513 as string, customfield_11514 as string, customfield_11515 as string, customfield_11517 as string, customfield_11518 as string, description as string, duedate as date, environment as string, fixVersions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], issuelinks as (id as integer, inwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), outwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), self as string, type as (id as short, inward as string, name as string, outward as string, self as string))[], issuetype as (avatarId as short, description as string, hierarchyLevel as short, iconUrl as string, id as short, name as string, self as string, subtask as boolean), labels as string[], lastViewed as string, parent as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), priority as (iconUrl as string, id as short, name as string, self as string), progress as (percent as short, progress as integer, total as integer), project as (avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), id as short, key as string, name as string, projectTypeKey as string, self as string, simplified as boolean), reporter as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), resolution as (description as string, id as short, name as string, self as string), resolutiondate as string, security as string, status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), statuscategorychangedate as string, subtasks as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as short, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string)[], summary as string, timeestimate as boolean, timeoriginalestimate as string, timespent as integer, updated as string, versions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], votes as (hasVoted as boolean, self as string, votes as boolean), watches as (isWatching as boolean, self as string, watchCount as short), workratio as short), id as integer, key as string, self as string)[],",
+						"          maxResults as short,",
+						"          startAt as boolean,",
+						"          total as short",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments',",
+						"     timestampFormats: ['yyyy-MM-dd\\'T\\'HH:mm:ss\\'Z\\'']) ~> source1",
+						"source1 foldDown(unroll(issues, issues),",
+						"     mapColumn(",
+						"          Id = issues.id,",
+						"          Key = issues.key,",
+						"          Assignee_Name = issues.fields.assignee.displayName,",
+						"          Summary = issues.fields.summary,",
+						"          Issue_Name = issues.fields.issuetype.name,",
+						"          Created = issues.fields.created,",
+						"          Updated = issues.fields.updated,",
+						"          Poject_Id = issues.fields.project.id,",
+						"          Project_Key = issues.fields.project.key,",
+						"          Project_Name = issues.fields.project.name,",
+						"          Resolution_Name = issues.fields.resolution.name,",
+						"          Bug_Root_Cause = issues.fields.customfield_11350.value,",
+						"          Bug_Type = issues.fields.customfield_11338.value,",
+						"          Detection_Stage = issues.fields.customfield_10400.value,",
+						"          Severity = issues.fields.customfield_10702.value,",
+						"          Project_Type_Key = issues.fields.project.projectTypeKey,",
+						"          Story_Point = issues.fields.customfield_10005,",
+						"          Status_Name = issues.fields.status.name,",
+						"          Resolution = issues.fields.resolutiondate",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"source1 foldDown(unroll(issues.fields.customfield_10007, issues),",
+						"     mapColumn(",
+						"          Start_Date = issues.fields.customfield_10007.startDate,",
+						"          End_Date = issues.fields.customfield_10007.endDate,",
+						"          Sprint_Name = issues.fields.customfield_10007.name,",
+						"          Key = issues.key",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten2",
+						"source1 foldDown(unroll(issues.fields.issuelinks, issues),",
+						"     mapColumn(",
+						"          Priority_Name = issues.fields.issuelinks.inwardIssue.fields.priority.name,",
+						"          Key = issues.key",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten3",
+						"flatten1 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate1",
+						"derivedColumn5 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate2",
+						"flatten3 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate3",
+						"derivedColumn3, aggregate2 join(aggregate1@Key == aggregate2@Key,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, aggregate3 join(aggregate1@Key == aggregate3@Key,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2 select(mapColumn(",
+						"          Key = aggregate1@Key,",
+						"          Id,",
+						"          Assignee_Name,",
+						"          Summary,",
+						"          Issue_Name,",
+						"          Created,",
+						"          Updated,",
+						"          Poject_Id,",
+						"          Project_Key,",
+						"          Project_Name,",
+						"          Resolution_Name,",
+						"          Bug_Root_Cause,",
+						"          Bug_Type,",
+						"          Detection_Stage,",
+						"          Severity,",
+						"          Project_Type_Key,",
+						"          Story_Point,",
+						"          Status_Name,",
+						"          Resolution,",
+						"          Created_Date_Key,",
+						"          Created_Date,",
+						"          Updated_Date,",
+						"          Updated_Date_Key,",
+						"          Resolution_Date,",
+						"          Resolution_Date_key,",
+						"          Key = aggregate2@Key,",
+						"          Start_Date,",
+						"          End_Date,",
+						"          Sprint_Name,",
+						"          End_Date_TZ,",
+						"          New_End_Date_Key,",
+						"          New_End_Date,",
+						"          New_Start_Date_Key,",
+						"          New_Start_Date,",
+						"          New_End_Date_TZ,",
+						"          New_End_Date_Key_TZ,",
+						"          Key = aggregate3@Key,",
+						"          Priority_Name",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"flatten2 derive(End_Date_TZ = fromUTC(End_Date,'PST'),",
+						"          New_End_Date_Key = substring(toString(End_Date), 1,10),",
+						"          New_End_Date = substring(toString(End_Date), 1,10),",
+						"          New_Start_Date_Key = substring(Start_Date, 1,10),",
+						"          New_Start_Date = substring(Start_Date, 1,10)) ~> derivedColumn1",
+						"aggregate1 derive(Created_Date_Key = substring(Created, 1,10),",
+						"          Created_Date = substring(Created, 1,10),",
+						"          Updated_Date = substring(Updated, 1,10),",
+						"          Updated_Date_Key = substring(Updated, 1,10),",
+						"          Resolution_Date = substring(Resolution, 1,10),",
+						"          Resolution_Date_key = substring(Resolution, 1,10)) ~> derivedColumn2",
+						"derivedColumn2 derive(Created_Date_Key = replace(Created_Date_Key,\"-\",\"\"),",
+						"          Updated_Date_Key = replace(Updated_Date_Key,\"-\",\"\"),",
+						"          Resolution_Date_key = replace(Resolution_Date_key,\"-\",\"\")) ~> derivedColumn3",
+						"derivedColumn1 derive(New_End_Date_TZ = substring(toString(End_Date_TZ), 1,10),",
+						"          New_End_Date_Key = replace(New_End_Date_Key,\"-\",\"\"),",
+						"          New_Start_Date_Key = replace(New_Start_Date_Key,\"-\",\"\"),",
+						"          New_End_Date_Key_TZ = substring(toString(End_Date_TZ), 1,10)) ~> derivedColumn4",
+						"derivedColumn4 derive(New_End_Date_Key_TZ = replace(New_End_Date_Key_TZ,\"-\",\"\")) ~> derivedColumn5",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:[($Sink_FileName)],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_source_metrics_0_1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bug_V1_copy1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "test_bug_v1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText4",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						},
+						{
+							"name": "flatten2"
+						},
+						{
+							"name": "flatten3"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "aggregate3"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "join2"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "derivedColumn3"
+						},
+						{
+							"name": "derivedColumn4"
+						},
+						{
+							"name": "derivedColumn5"
+						},
+						{
+							"name": "aggregate4"
+						},
+						{
+							"name": "derivedColumn6"
+						},
+						{
+							"name": "derivedColumn7"
+						},
+						{
+							"name": "derivedColumn8"
+						},
+						{
+							"name": "derivedColumn9"
+						},
+						{
+							"name": "derivedColumn10"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     sink_Filename as string",
+						"}",
+						"source(output(",
+						"          ADFWebActivityResponseHeaders as ({Atl-Traceid} as string, {Cache-Control} as string, {Content-Type} as string, Date as string, Nel as string, {Report-To} as string, Server as string, {Set-Cookie} as string, {Strict-Transport-Security} as string, {Timing-Allow-Origin} as string, {Transfer-Encoding} as string, Vary as string, {X-Aaccountid} as string, {X-Arequestid} as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string),",
+						"          billingReference as (activityType as string, billableDuration as (duration as double, meterType as string, unit as string)[]),",
+						"          durationInQueue as (integrationRuntimeQueue as boolean),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as short,",
+						"          expand as string,",
+						"          issues as (expand as string, fields as (aggregateprogress as (percent as short, progress as integer, total as integer), aggregatetimeestimate as boolean, aggregatetimeoriginalestimate as string, aggregatetimespent as integer, assignee as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), components as (id as short, name as string, self as string)[], created as string, creator as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), customfield_10004 as string, customfield_10005 as double, customfield_10007 as (boardId as short, completeDate as string, endDate as timestamp, goal as string, id as short, name as string, startDate as string, state as string)[], customfield_10009 as string, customfield_10012 as string, customfield_10212 as string, customfield_10400 as (id as short, self as string, value as string), customfield_10601 as string, customfield_10700 as string, customfield_10702 as (id as short, self as string, value as string), customfield_10703 as string, customfield_10800 as (hasEpicLinkFieldDependency as boolean, nonEditableReason as (message as string, reason as string), showField as boolean), customfield_10900 as string, customfield_11000 as string, customfield_11100 as string, customfield_11200 as string, customfield_11307 as string, customfield_11308 as string[], customfield_11309 as string, customfield_11310 as string, customfield_11312 as string, customfield_11315 as string, customfield_11317 as string, customfield_11318 as string, customfield_11319 as string, customfield_11320 as string, customfield_11321 as string, customfield_11322 as string, customfield_11323 as string, customfield_11325 as string, customfield_11331 as string, customfield_11337 as string, customfield_11338 as (id as short, self as string, value as string), customfield_11339 as string, customfield_11341 as (id as short, self as string, value as string), customfield_11342 as (id as short, self as string, value as string), customfield_11343 as string, customfield_11345 as string, customfield_11347 as string, customfield_11348 as string, customfield_11350 as (id as short, self as string, value as string), customfield_11352 as string, customfield_11361 as string, customfield_11362 as string, customfield_11364 as string, customfield_11365 as string, customfield_11366 as string, customfield_11368 as string, customfield_11369 as string, customfield_11370 as string, customfield_11371 as string, customfield_11372 as string, customfield_11373 as string, customfield_11374 as string, customfield_11375 as string, customfield_11376 as string, customfield_11379 as string, customfield_11380 as string, customfield_11381 as string, customfield_11382 as string, customfield_11383 as string, customfield_11384 as string, customfield_11385 as string, customfield_11386 as string, customfield_11387 as string, customfield_11388 as string, customfield_11389 as string, customfield_11390 as string, customfield_11394 as string, customfield_11395 as string, customfield_11396 as string, customfield_11397 as string, customfield_11398 as string, customfield_11399 as string, customfield_11400 as string, customfield_11401 as string, customfield_11402 as string, customfield_11403 as string, customfield_11404 as string, customfield_11405 as string, customfield_11406 as string, customfield_11407 as string, customfield_11408 as string, customfield_11409 as string, customfield_11410 as string, customfield_11411 as string, customfield_11412 as string, customfield_11413 as string, customfield_11414 as string, customfield_11415 as string, customfield_11416 as string, customfield_11417 as string, customfield_11418 as string, customfield_11419 as string, customfield_11420 as string, customfield_11421 as string[], customfield_11422 as string, customfield_11423 as string, customfield_11424 as string, customfield_11425 as string, customfield_11426 as string, customfield_11427 as string, customfield_11428 as string, customfield_11429 as string, customfield_11431 as string, customfield_11432 as string, customfield_11433 as string, customfield_11434 as string, customfield_11435 as string, customfield_11436 as string, customfield_11437 as string, customfield_11438 as string, customfield_11439 as string, customfield_11440 as string, customfield_11441 as string, customfield_11442 as string, customfield_11443 as string, customfield_11444 as string, customfield_11445 as string, customfield_11446 as string, customfield_11447 as string, customfield_11448 as string, customfield_11449 as string, customfield_11450 as string, customfield_11451 as string, customfield_11452 as string, customfield_11453 as string, customfield_11454 as string, customfield_11455 as string, customfield_11469 as string, customfield_11471 as string, customfield_11472 as string, customfield_11474 as string, customfield_11475 as string, customfield_11476 as string, customfield_11478 as string, customfield_11479 as string, customfield_11480 as string, customfield_11482 as string, customfield_11483 as string, customfield_11502 as string, customfield_11503 as string, customfield_11504 as string, customfield_11505 as string, customfield_11507 as string, customfield_11512 as string, customfield_11513 as string, customfield_11514 as string, customfield_11515 as string, customfield_11517 as string, customfield_11518 as (id as short, self as string, value as boolean), customfield_11519 as string, customfield_11521 as string, customfield_11522 as string, customfield_11523 as string, description as string, duedate as date, environment as string, fixVersions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], issuelinks as (id as integer, inwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), outwardIssue as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), self as string, type as (id as short, inward as string, name as string, outward as string, self as string))[], issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), labels as string[], lastViewed as string, parent as (fields as (issuetype as (avatarId as short, description as string, hierarchyLevel as boolean, iconUrl as string, id as short, name as string, self as string, subtask as boolean), priority as (iconUrl as string, id as short, name as string, self as string), status as (description as string, iconUrl as string, id as boolean, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), summary as string), id as integer, key as string, self as string), priority as (iconUrl as string, id as short, name as string, self as string), progress as (percent as short, progress as integer, total as integer), project as (avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), id as short, key as string, name as string, projectTypeKey as string, self as string, simplified as boolean), reporter as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, emailAddress as string, self as string, timeZone as string), resolution as (description as string, id as short, name as string, self as string), resolutiondate as string, security as string, status as (description as string, iconUrl as string, id as short, name as string, self as string, statusCategory as (colorName as string, id as short, key as string, name as string, self as string)), statuscategorychangedate as string, subtasks as string[], summary as string, timeestimate as boolean, timeoriginalestimate as string, timespent as integer, updated as string, versions as (archived as boolean, description as string, id as short, name as string, releaseDate as date, released as boolean, self as string)[], votes as (hasVoted as boolean, self as string, votes as boolean), watches as (isWatching as boolean, self as string, watchCount as short), workratio as short), id as integer, key as string, self as string)[],",
+						"          maxResults as short,",
+						"          startAt as boolean,",
+						"          total as short",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments',",
+						"     timestampFormats: ['MM-dd-yyyy HH:mm:ss','yyyy-MM-dd\\'T\\'HH:mm:ss\\'Z\\'']) ~> source1",
+						"source1 foldDown(unroll(issues, issues),",
+						"     mapColumn(",
+						"          Id = issues.id,",
+						"          Key = issues.key,",
+						"          Assignee_Name = issues.fields.assignee.displayName,",
+						"          Summary = issues.fields.summary,",
+						"          Issue_Name = issues.fields.issuetype.name,",
+						"          Created = issues.fields.created,",
+						"          Updated = issues.fields.updated,",
+						"          Poject_Id = issues.fields.project.id,",
+						"          Project_Key = issues.fields.project.key,",
+						"          Project_Name = issues.fields.project.name,",
+						"          Resolution_Name = issues.fields.resolution.name,",
+						"          Bug_Root_Cause = issues.fields.customfield_11350.value,",
+						"          Bug_Type = issues.fields.customfield_11338.value,",
+						"          Detection_Stage = issues.fields.customfield_10400.value,",
+						"          Severity = issues.fields.customfield_10702.value,",
+						"          Project_Type_Key = issues.fields.project.projectTypeKey,",
+						"          Story_Point = issues.fields.customfield_10005,",
+						"          Status_Name = issues.fields.status.name,",
+						"          Resolution = issues.fields.resolutiondate",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"source1 foldDown(unroll(issues.fields.customfield_10007, issues),",
+						"     mapColumn(",
+						"          Sprint_Start_Date = issues.fields.customfield_10007.startDate,",
+						"          Sprint_CompleteDate = issues.fields.customfield_10007.completeDate,",
+						"          Sprint_Name = issues.fields.customfield_10007.name,",
+						"          Key = issues.key",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten2",
+						"source1 foldDown(unroll(issues.fields.issuelinks, issues),",
+						"     mapColumn(",
+						"          Priority_Name = issues.fields.priority.name,",
+						"          Key = issues.key",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten3",
+						"flatten1 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate1",
+						"flatten3 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate3",
+						"derivedColumn3, derivedColumn8 join(aggregate1@Key == aggregate4@Key,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1, aggregate3 join(aggregate1@Key == aggregate3@Key,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"join2 select(mapColumn(",
+						"          Key = aggregate1@Key,",
+						"          Id,",
+						"          Assignee_Name,",
+						"          Summary,",
+						"          Issue_Name,",
+						"          Created,",
+						"          Updated,",
+						"          Poject_Id,",
+						"          Project_Key,",
+						"          Project_Name,",
+						"          Resolution_Name,",
+						"          Bug_Root_Cause,",
+						"          Bug_Type,",
+						"          Detection_Stage,",
+						"          Severity,",
+						"          Project_Type_Key,",
+						"          Story_Point,",
+						"          Status_Name,",
+						"          Resolution,",
+						"          Created_Date_Key,",
+						"          Created_Date,",
+						"          Updated_Date,",
+						"          Updated_Date_Key,",
+						"          Resolution_Date,",
+						"          Resolution_Date_key,",
+						"          Key = aggregate4@Key,",
+						"          Sprint_Start_Date,",
+						"          Sprint_CompleteDate,",
+						"          Sprint_Name,",
+						"          New_Sprint_Start_Date,",
+						"          New_Sprint_Complete_Date,",
+						"          New_Sprint_Start_Date_Key,",
+						"          New_Sprint_Complete_Date_Key,",
+						"          Key = aggregate3@Key,",
+						"          Priority_Name",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"derivedColumn10 derive(Sprint_Start_Date = toTimestamp(Sprint_Start_Date, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+						"          Sprint_CompleteDate = toTimestamp(Sprint_CompleteDate, 'yyyy-MM-dd\\'T\\'HH:mm:ss')) ~> derivedColumn1",
+						"derivedColumn7 derive(Created_Date_Key = substring(toString(Created), 1,10),",
+						"          Created_Date = substring(toString(Created), 1,10),",
+						"          Updated_Date = substring(toString(Updated), 1,10),",
+						"          Updated_Date_Key = substring(toString(Updated), 1,10),",
+						"          Resolution_Date = substring(toString(Resolution), 1,10),",
+						"          Resolution_Date_key = substring(toString(Resolution), 1,10)) ~> derivedColumn2",
+						"derivedColumn2 derive(Created_Date_Key = replace(Created_Date_Key,\"-\",\"\"),",
+						"          Updated_Date_Key = replace(Updated_Date_Key,\"-\",\"\"),",
+						"          Resolution_Date_key = replace(Resolution_Date_key,\"-\",\"\")) ~> derivedColumn3",
+						"derivedColumn1 derive(Sprint_Start_Date = fromUTC(Sprint_Start_Date,'PST'),",
+						"          Sprint_CompleteDate = fromUTC(Sprint_CompleteDate,'PST')) ~> derivedColumn4",
+						"derivedColumn4 derive(New_Sprint_Start_Date = substring(toString(Sprint_Start_Date), 1,10),",
+						"          New_Sprint_Complete_Date = substring(toString(Sprint_CompleteDate), 1,10),",
+						"          New_Sprint_Start_Date_Key = substring(toString(Sprint_Start_Date), 1,10),",
+						"          New_Sprint_Complete_Date_Key = substring(toString(Sprint_CompleteDate), 1,10)) ~> derivedColumn5",
+						"flatten2 aggregate(groupBy(Key),",
+						"     each(match(name!=\"Key\"), $$ = first($$))) ~> aggregate4",
+						"derivedColumn9 derive(Created = toTimestamp(Created, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+						"          Updated = toTimestamp(Updated, 'yyyy-MM-dd\\'T\\'HH:mm:ss'),",
+						"          Resolution = toTimestamp(Resolution, 'yyyy-MM-dd\\'T\\'HH:mm:ss')) ~> derivedColumn6",
+						"derivedColumn6 derive(Created = fromUTC(Created,'PST'),",
+						"          Updated = fromUTC(Updated,'PST'),",
+						"          Resolution = fromUTC(Resolution,'PST')) ~> derivedColumn7",
+						"derivedColumn5 derive(New_Sprint_Start_Date_Key = replace(New_Sprint_Start_Date_Key,\"-\",\"\"),",
+						"          New_Sprint_Complete_Date_Key = replace(New_Sprint_Complete_Date_Key,\"-\",\"\")) ~> derivedColumn8",
+						"aggregate1 derive(Created = substring(Created, 1, 19),",
+						"          Updated = substring(Updated, 1, 19),",
+						"          Resolution = substring(Resolution, 1, 19)) ~> derivedColumn9",
+						"aggregate4 derive(Sprint_Start_Date = substring(Sprint_Start_Date, 1, 19),",
+						"          Sprint_CompleteDate = substring(Sprint_CompleteDate, 1, 19)) ~> derivedColumn10",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:[(toString($sink_Filename))],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/test_bug_v1')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText4')]"
+			]
+		}
+	]
+}

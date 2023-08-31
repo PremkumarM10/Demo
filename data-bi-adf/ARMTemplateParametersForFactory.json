@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "data-bi-adf"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"Ls_AzurePostgreSql_connectionString": {
+			"value": ""
+		},
+		"Self_Host_LS_connectionString": {
+			"value": ""
+		},
+		"SqlServer1_connectionString": {
+			"value": "Integrated Security=True;Data Source=Y22SBTP117\\SQLEXPRESS;Initial Catalog=Demo"
+		},
+		"SqlServer1_password": {
+			"value": ""
+		},
+		"SqlServer2_connectionString": {
+			"value": ""
+		},
+		"ls_postgre_connectionString": {
+			"value": ""
+		},
+		"SqlServer1_properties_typeProperties_userName": {
+			"value": "CREATIVE\\hemalatp"
+		}
+	}
+}

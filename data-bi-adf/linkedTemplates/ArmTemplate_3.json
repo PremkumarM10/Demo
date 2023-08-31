@@ -1,0 +1,4071 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "data-bi-adf"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Issuetype_History')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Issuetype_History_test_input_df",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Issuetype_History_Test_output_df",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						},
+						{
+							"name": "flatten2"
+						},
+						{
+							"name": "join1"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "derivedColumn3"
+						},
+						{
+							"name": "derivedColumn4"
+						},
+						{
+							"name": "derivedColumn5"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "derivedColumn6"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "derivedColumn7"
+						},
+						{
+							"name": "derivedColumn8"
+						},
+						{
+							"name": "join2"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     sink_filename as string",
+						"}",
+						"source(output(",
+						"          self as string,",
+						"          maxResults as integer,",
+						"          startAt as integer,",
+						"          total as integer,",
+						"          isLast as boolean,",
+						"          values as (id as string, author as (self as string, accountId as string, avatarUrls as ({48x48} as string, {24x24} as string, {16x16} as string, {32x32} as string), displayName as string, active as boolean, timeZone as string, accountType as string), created as string, items as (field as string, fieldtype as string, from as string, fromString as string, to as string, toString as string)[])[],",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     rowUrlColumn: 'filename',",
+						"     documentForm: 'arrayOfDocuments') ~> source1",
+						"source1 foldDown(unroll(values, values),",
+						"     mapColumn(",
+						"          Id = values.id,",
+						"          Old_Created_Date = values.created,",
+						"          Name = values.author.displayName",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"source1 foldDown(unroll(values.items, values),",
+						"     mapColumn(",
+						"          Id = values.id,",
+						"          From_String = values.items.fromString,",
+						"          To_String = values.items.toString",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten2",
+						"flatten2, flatten1 join(flatten2@Id == flatten1@Id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 select(mapColumn(",
+						"          Id = flatten1@Id,",
+						"          Name,",
+						"          From_String,",
+						"          To_String,",
+						"          Old_Created_Date",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 derive(new = toTimestamp(Old_Created_Date, 'yyyy-MM-dd\\'T\\'HH:mm:ss.SSSXXX')) ~> derivedColumn1",
+						"derivedColumn1 derive(new2 = fromUTC(new,'PST')) ~> derivedColumn2",
+						"derivedColumn2 derive(New_Creatd_Date = toString(new2)) ~> derivedColumn3",
+						"derivedColumn5 derive(Time = substring(New_Creatd_Date,11,20),",
+						"          key2 = 1) ~> derivedColumn4",
+						"derivedColumn3 derive(Date = substring(New_Creatd_Date,1,10)) ~> derivedColumn5",
+						"join2 select(mapColumn(",
+						"          Id,",
+						"          Key,",
+						"          Name,",
+						"          From_String,",
+						"          To_String,",
+						"          Old_Created_Date,",
+						"          New_Creatd_Date,",
+						"          Date,",
+						"          Time",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"source1 derive(key1 = 1) ~> derivedColumn6",
+						"derivedColumn6 select(mapColumn(",
+						"          filename,",
+						"          key1",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"select3 derive(filename1 = replace(filename,\"/IssueHistory_\",\"\")) ~> derivedColumn7",
+						"derivedColumn7 derive(Key = replace(filename1,\".json\",\"\")) ~> derivedColumn8",
+						"derivedColumn4, derivedColumn8 join(key2 == key1,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join2",
+						"select2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:[(toString($sink_filename))],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Project')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Monthly_Metrics_V1/Project"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_Project_Source_DF",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Project_Sink",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						},
+						{
+							"name": "derivedColumn2"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ADFWebActivityResponseHeaders as ({Atl-Traceid} as string, {Cache-Control} as string, {Content-Type} as string, Date as string, Nel as string, {Report-To} as string, Server as string, {Set-Cookie} as string, {Strict-Transport-Security} as string, {Timing-Allow-Origin} as string, {Transfer-Encoding} as string, Vary as string, {X-Aaccountid} as string, {X-Arequestid} as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string),",
+						"          billingReference as (activityType as string, billableDuration as (duration as double, meterType as string, unit as string)[]),",
+						"          durationInQueue as (integrationRuntimeQueue as boolean),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as boolean,",
+						"          isLast as boolean,",
+						"          maxResults as short,",
+						"          self as string,",
+						"          startAt as boolean,",
+						"          total as short,",
+						"          values as (avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), entityId as string, expand as string, id as short, isPrivate as boolean, key as string, lead as (accountId as string, accountType as string, active as boolean, avatarUrls as ({16x16} as string, {24x24} as string, {32x32} as string, {48x48} as string), displayName as string, self as string), name as string, projectCategory as (description as string, id as short, name as string, self as string), projectTypeKey as string, self as string, simplified as boolean, style as string, uuid as string)[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source1",
+						"source1 foldDown(unroll(values),",
+						"     mapColumn(",
+						"          Project_Name = values.name,",
+						"          Project_Key = values.key,",
+						"          Category = values.projectCategory.name,",
+						"          Lead = values.lead.displayName,",
+						"          simplified = values.simplified",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 derive(Type = iif(toString(simplified) == 'true', 'Team-managed software', iif(toString(simplified) == 'false', 'Company-managed software', toString(simplified)))) ~> derivedColumn2",
+						"derivedColumn2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     partitionFileNames:['Project.parquet'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Velocity')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Monthly_Metrics_V1/Velocity"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_FMA_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_VMM_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source4"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_RE_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source5"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_DESM_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source6"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_EVM_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source7"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_VMN_Source",
+								"type": "DatasetReference"
+							},
+							"name": "source8"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_Velocity_Sink_DS",
+								"type": "DatasetReference"
+							},
+							"name": "sink7"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten4"
+						},
+						{
+							"name": "flatten5"
+						},
+						{
+							"name": "unpivot3"
+						},
+						{
+							"name": "aggregate3"
+						},
+						{
+							"name": "select3"
+						},
+						{
+							"name": "flatten6"
+						},
+						{
+							"name": "unpivot4"
+						},
+						{
+							"name": "aggregate4"
+						},
+						{
+							"name": "select4"
+						},
+						{
+							"name": "join3"
+						},
+						{
+							"name": "join4"
+						},
+						{
+							"name": "select5"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "flatten8"
+						},
+						{
+							"name": "select6"
+						},
+						{
+							"name": "flatten9"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "flatten10"
+						},
+						{
+							"name": "unpivot6"
+						},
+						{
+							"name": "aggregate6"
+						},
+						{
+							"name": "flatten11"
+						},
+						{
+							"name": "select7"
+						},
+						{
+							"name": "join5"
+						},
+						{
+							"name": "flatten12"
+						},
+						{
+							"name": "unpivot7"
+						},
+						{
+							"name": "aggregate7"
+						},
+						{
+							"name": "select8"
+						},
+						{
+							"name": "join6"
+						},
+						{
+							"name": "select9"
+						},
+						{
+							"name": "select10"
+						},
+						{
+							"name": "join7"
+						},
+						{
+							"name": "flatten13"
+						},
+						{
+							"name": "unpivot8"
+						},
+						{
+							"name": "aggregate8"
+						},
+						{
+							"name": "select11"
+						},
+						{
+							"name": "join8"
+						},
+						{
+							"name": "select12"
+						},
+						{
+							"name": "derivedColumn3"
+						},
+						{
+							"name": "flatten14"
+						},
+						{
+							"name": "derivedColumn4"
+						},
+						{
+							"name": "flatten15"
+						},
+						{
+							"name": "unpivot9"
+						},
+						{
+							"name": "aggregate9"
+						},
+						{
+							"name": "select13"
+						},
+						{
+							"name": "flatten16"
+						},
+						{
+							"name": "unpivot10"
+						},
+						{
+							"name": "aggregate10"
+						},
+						{
+							"name": "select14"
+						},
+						{
+							"name": "join9"
+						},
+						{
+							"name": "join10"
+						},
+						{
+							"name": "select15"
+						},
+						{
+							"name": "cast1"
+						},
+						{
+							"name": "cast2"
+						},
+						{
+							"name": "cast3"
+						},
+						{
+							"name": "flatten17"
+						},
+						{
+							"name": "derivedColumn5"
+						},
+						{
+							"name": "flatten18"
+						},
+						{
+							"name": "unpivot11"
+						},
+						{
+							"name": "aggregate11"
+						},
+						{
+							"name": "select16"
+						},
+						{
+							"name": "flatten19"
+						},
+						{
+							"name": "unpivot12"
+						},
+						{
+							"name": "aggregate12"
+						},
+						{
+							"name": "select17"
+						},
+						{
+							"name": "join11"
+						},
+						{
+							"name": "join12"
+						},
+						{
+							"name": "select18"
+						},
+						{
+							"name": "cast4"
+						},
+						{
+							"name": "flatten20"
+						},
+						{
+							"name": "unpivot13"
+						},
+						{
+							"name": "aggregate13"
+						},
+						{
+							"name": "select19"
+						},
+						{
+							"name": "flatten21"
+						},
+						{
+							"name": "derivedColumn6"
+						},
+						{
+							"name": "flatten22"
+						},
+						{
+							"name": "unpivot14"
+						},
+						{
+							"name": "aggregate14"
+						},
+						{
+							"name": "select20"
+						},
+						{
+							"name": "join13"
+						},
+						{
+							"name": "join14"
+						},
+						{
+							"name": "select21"
+						},
+						{
+							"name": "cast5"
+						},
+						{
+							"name": "cast6"
+						},
+						{
+							"name": "union2"
+						},
+						{
+							"name": "union3"
+						},
+						{
+							"name": "union4"
+						},
+						{
+							"name": "union5"
+						},
+						{
+							"name": "union6"
+						},
+						{
+							"name": "unpivot15"
+						},
+						{
+							"name": "aggregate15"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2968} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3043} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3065} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3108} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3148} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3191} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3233} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> source2",
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2996} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3028} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3066} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3114} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3143} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3185} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3231} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source4",
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2932} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string)[]), {2962} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {2997} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3037} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3101} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3106} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3110} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source5",
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2987} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3019} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3055} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3109} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3118} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3142} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3194} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source6",
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2972} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3001} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3041} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3073} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3119} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[]), {3120} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string, value as double)[]), {3199} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string)[], completedEntries as (issueKey as string)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source7",
+						"source(output(",
+						"          sprints as (id as integer, sequence as integer, name as string, state as string, linkedPagesCount as integer, goal as string, sprintVersion as integer)[],",
+						"          velocityStatEntries as ({2838} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {2840} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3002} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3051} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3104} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3123} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[]), {3165} as (estimated as (value as double, text as string), completed as (value as double, text as string), allConsideredIssueKeys as string[], estimatedEntries as (issueKey as string, value as double)[], completedEntries as (issueKey as string, value as double)[])),",
+						"          ADFWebActivityResponseHeaders as ({Timing-Allow-Origin} as string, {X-Arequestid} as string, {X-Aaccountid} as string, Vary as string, {X-Content-Type-Options} as string, {X-Xss-Protection} as string, {Atl-Traceid} as string, {Report-To} as string, Nel as string, {Strict-Transport-Security} as string, {Transfer-Encoding} as string, {Cache-Control} as string, Date as string, {Set-Cookie} as string, Server as string, {Content-Type} as string),",
+						"          effectiveIntegrationRuntime as string,",
+						"          executionDuration as integer,",
+						"          durationInQueue as (integrationRuntimeQueue as integer),",
+						"          billingReference as (activityType as string, billableDuration as (meterType as string, duration as double, unit as string)[])",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'arrayOfDocuments') ~> source8",
+						"source2 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          Id = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence,",
+						"          Date = ADFWebActivityResponseHeaders.Date",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten4",
+						"source2 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2968} = velocityStatEntries.{2968}.estimated.value,",
+						"          {3043} = velocityStatEntries.{3043}.estimated.value,",
+						"          {3065} = velocityStatEntries.{3065}.estimated.value,",
+						"          {3108} = velocityStatEntries.{3108}.estimated.value,",
+						"          {3148} = velocityStatEntries.{3148}.estimated.value,",
+						"          {3191} = velocityStatEntries.{3191}.estimated.value,",
+						"          {3233} = velocityStatEntries.{3233}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten5",
+						"flatten5 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot3",
+						"unpivot3 aggregate(groupBy(new),",
+						"     each(match(name!=\"new\"), $$ = first($$))) ~> aggregate3",
+						"aggregate3 select(mapColumn(",
+						"          EstimatedValue = new,",
+						"          sprintid = unpivot",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select3",
+						"source2 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2968} = velocityStatEntries.{2968}.completed.value,",
+						"          {3043} = velocityStatEntries.{3043}.completed.value,",
+						"          {3065} = velocityStatEntries.{3065}.completed.value,",
+						"          {3108} = velocityStatEntries.{3108}.completed.value,",
+						"          {3148} = velocityStatEntries.{3148}.completed.value,",
+						"          {3191} = velocityStatEntries.{3191}.completed.value,",
+						"          {3233} = velocityStatEntries.{3233}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten6",
+						"flatten6 unpivot(output(",
+						"          unpivot as decimal(10,0),",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot4",
+						"unpivot4 aggregate(groupBy(new),",
+						"     each(match(name!=\"new\"), $$ = first($$))) ~> aggregate4",
+						"aggregate4 select(mapColumn(",
+						"          CompletedValue = new,",
+						"          ID = unpivot",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select4",
+						"select4, select3 join(ID == sprintid,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join3",
+						"join3, derivedColumn1 join(select4@ID == flatten4@Id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join4",
+						"join4 select(mapColumn(",
+						"          Sprintid = sprintid,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select5",
+						"flatten4 derive(ProjectKey = substring(SprintName, 1,4)) ~> derivedColumn1",
+						"source4 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2996} = velocityStatEntries.{2996}.completed.value,",
+						"          {3028} = velocityStatEntries.{3028}.completed.value,",
+						"          {3066} = velocityStatEntries.{3066}.completed.value,",
+						"          {3114} = velocityStatEntries.{3114}.completed.value,",
+						"          {3143} = velocityStatEntries.{3143}.completed.value,",
+						"          {3185} = velocityStatEntries.{3185}.completed.value,",
+						"          {3231} = velocityStatEntries.{3231}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten8",
+						"aggregate15 select(mapColumn(",
+						"          CompletedValue = new,",
+						"          ID = unpivot",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select6",
+						"source5 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          Id = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten9",
+						"flatten9 derive(ProjectKey = \"RE\") ~> derivedColumn2",
+						"source5 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2932} = velocityStatEntries.{2932}.completed.value,",
+						"          {2962} = velocityStatEntries.{2962}.completed.value,",
+						"          {2997} = velocityStatEntries.{2997}.completed.value,",
+						"          {3037} = velocityStatEntries.{3037}.completed.value,",
+						"          {3101} = velocityStatEntries.{3101}.completed.value,",
+						"          {3106} = velocityStatEntries.{3106}.completed.value,",
+						"          {3110} = velocityStatEntries.{3110}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten10",
+						"flatten10 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot6",
+						"unpivot6 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate6",
+						"source4 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten11",
+						"aggregate6 select(mapColumn(",
+						"          Id = unpivot,",
+						"          CompletedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select7",
+						"derivedColumn2, select7 join(flatten9@Id == select7@Id,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join5",
+						"source5 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2932} = velocityStatEntries.{2932}.estimated.value,",
+						"          {2962} = velocityStatEntries.{2962}.estimated.value,",
+						"          {2997} = velocityStatEntries.{2997}.estimated.value,",
+						"          {3037} = velocityStatEntries.{3037}.estimated.value,",
+						"          {3101} = velocityStatEntries.{3101}.estimated.value,",
+						"          {3106} = velocityStatEntries.{3106}.estimated.value,",
+						"          {3110} = velocityStatEntries.{3110}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten12",
+						"flatten12 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot7",
+						"unpivot7 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate7",
+						"aggregate7 select(mapColumn(",
+						"          SprintId = unpivot,",
+						"          EstimatedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select8",
+						"select8, select9 join(SprintId == Id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join6",
+						"join5 select(mapColumn(",
+						"          Id = flatten9@Id,",
+						"          SprintName,",
+						"          SprintSequence,",
+						"          ProjectKey,",
+						"          Id = select7@Id,",
+						"          CompletedValue",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select9",
+						"join6 select(mapColumn(",
+						"          Sprintid = SprintId,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select10",
+						"derivedColumn3, select6 join(flatten11@id == select6@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join7",
+						"source4 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2996} = velocityStatEntries.{2996}.estimated.value,",
+						"          {3028} = velocityStatEntries.{3028}.estimated.value,",
+						"          {3066} = velocityStatEntries.{3066}.estimated.value,",
+						"          {3114} = velocityStatEntries.{3114}.estimated.value,",
+						"          {3143} = velocityStatEntries.{3143}.estimated.value,",
+						"          {3185} = velocityStatEntries.{3185}.estimated.value,",
+						"          {3231} = velocityStatEntries.{3231}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten13",
+						"flatten13 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot8",
+						"unpivot8 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate8",
+						"aggregate8 select(mapColumn(",
+						"          SprintId = unpivot,",
+						"          EstimatedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select11",
+						"select11, join7 join(SprintId == select6@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join8",
+						"join8 select(mapColumn(",
+						"          Sprintid = SprintId,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select12",
+						"flatten11 derive(ProjectKey = \"VMM\") ~> derivedColumn3",
+						"source6 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          SprintId = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten14",
+						"flatten14 derive(ProjectKey = substring(SprintName,1,4)) ~> derivedColumn4",
+						"source6 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2987} = velocityStatEntries.{2987}.completed.value,",
+						"          {3019} = velocityStatEntries.{3019}.completed.value,",
+						"          {3055} = velocityStatEntries.{3055}.completed.value,",
+						"          {3109} = velocityStatEntries.{3109}.completed.value,",
+						"          {3118} = velocityStatEntries.{3118}.completed.value,",
+						"          {3142} = velocityStatEntries.{3142}.completed.value,",
+						"          {3194} = velocityStatEntries.{3194}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten15",
+						"flatten15 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot9",
+						"unpivot9 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate9",
+						"aggregate9 select(mapColumn(",
+						"          Id = unpivot,",
+						"          CompletedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select13",
+						"source6 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2987} = velocityStatEntries.{2987}.estimated.value,",
+						"          {3019} = velocityStatEntries.{3019}.estimated.value,",
+						"          {3055} = velocityStatEntries.{3055}.estimated.value,",
+						"          {3109} = velocityStatEntries.{3109}.estimated.value,",
+						"          {3118} = velocityStatEntries.{3118}.estimated.value,",
+						"          {3142} = velocityStatEntries.{3142}.estimated.value,",
+						"          {3194} = velocityStatEntries.{3194}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten16",
+						"flatten16 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot10",
+						"unpivot10 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate10",
+						"aggregate10 select(mapColumn(",
+						"          ID = unpivot,",
+						"          EstimatedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select14",
+						"select14, select13 join(select14@ID == select13@Id,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join9",
+						"join9, derivedColumn4 join(select14@ID == SprintId,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join10",
+						"join10 select(mapColumn(",
+						"          Sprintid = SprintId,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select15",
+						"select15 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast1",
+						"select12 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast2",
+						"select10 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast3",
+						"source7 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          SprintId = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten17",
+						"flatten17 derive(ProjectKey = \"EVM\") ~> derivedColumn5",
+						"source7 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          Id = sprints.id,",
+						"          {2972} = velocityStatEntries.{2972}.estimated.value,",
+						"          {3001} = velocityStatEntries.{3001}.estimated.value,",
+						"          {3041} = velocityStatEntries.{3041}.estimated.value,",
+						"          {3073} = velocityStatEntries.{3073}.estimated.value,",
+						"          {3119} = velocityStatEntries.{3119}.estimated.value,",
+						"          {3120} = velocityStatEntries.{3120}.estimated.value,",
+						"          {3199} = velocityStatEntries.{3199}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten18",
+						"flatten18 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(Id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot11",
+						"unpivot11 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate11",
+						"aggregate11 select(mapColumn(",
+						"          SprintId = unpivot,",
+						"          EstimatedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select16",
+						"source7 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2972} = velocityStatEntries.{2972}.completed.value,",
+						"          {3001} = velocityStatEntries.{3001}.completed.value,",
+						"          {3041} = velocityStatEntries.{3041}.completed.value,",
+						"          {3073} = velocityStatEntries.{3073}.completed.value,",
+						"          {3119} = velocityStatEntries.{3119}.completed.value,",
+						"          {3120} = velocityStatEntries.{3120}.completed.value,",
+						"          {3199} = velocityStatEntries.{3199}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten19",
+						"flatten19 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot12",
+						"unpivot12 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate12",
+						"aggregate12 select(mapColumn(",
+						"          SprintId = unpivot,",
+						"          CompletedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select17",
+						"select17, select16 join(select17@SprintId == select16@SprintId,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join11",
+						"join11, derivedColumn5 join(select17@SprintId == flatten17@SprintId,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join12",
+						"join12 select(mapColumn(",
+						"          Sprintid = select17@SprintId,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select18",
+						"select18 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast4",
+						"source8 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2838} = velocityStatEntries.{2838}.completed.value,",
+						"          {2840} = velocityStatEntries.{2840}.completed.value,",
+						"          {3002} = velocityStatEntries.{3002}.completed.value,",
+						"          {3051} = velocityStatEntries.{3051}.completed.value,",
+						"          {3104} = velocityStatEntries.{3104}.completed.value,",
+						"          {3123} = velocityStatEntries.{3123}.completed.value,",
+						"          {3165} = velocityStatEntries.{3165}.completed.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten20",
+						"flatten20 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot13",
+						"unpivot13 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate13",
+						"aggregate13 select(mapColumn(",
+						"          SprintId = unpivot,",
+						"          CompletedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select19",
+						"source8 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          SprintId = sprints.id,",
+						"          SprintName = sprints.name,",
+						"          SprintSequence = sprints.sequence",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten21",
+						"flatten21 derive(ProjectKey = \"VMN\") ~> derivedColumn6",
+						"source8 foldDown(unroll(sprints, sprints),",
+						"     mapColumn(",
+						"          id = sprints.id,",
+						"          {2838} = velocityStatEntries.{2838}.estimated.value,",
+						"          {2840} = velocityStatEntries.{2840}.estimated.value,",
+						"          {3002} = velocityStatEntries.{3002}.estimated.value,",
+						"          {3051} = velocityStatEntries.{3051}.estimated.value,",
+						"          {3104} = velocityStatEntries.{3104}.estimated.value,",
+						"          {3123} = velocityStatEntries.{3123}.estimated.value,",
+						"          {3165} = velocityStatEntries.{3165}.estimated.value",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten22",
+						"flatten22 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot14",
+						"unpivot14 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate14",
+						"aggregate14 select(mapColumn(",
+						"          id = unpivot,",
+						"          EstimatedValue = new",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select20",
+						"select20, derivedColumn6 join(id == SprintId,",
+						"     joinType:'left',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join13",
+						"join13, select19 join(id == select19@SprintId,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join14",
+						"join14 select(mapColumn(",
+						"          Sprintid = id,",
+						"          CompletedValue,",
+						"          EstimatedValue,",
+						"          SprintSequence,",
+						"          SprintName,",
+						"          ProjectKey",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select21",
+						"select21 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast5",
+						"select5 cast(output(",
+						"          Sprintid as string,",
+						"          CompletedValue as string,",
+						"          EstimatedValue as string,",
+						"          SprintSequence as string,",
+						"          SprintName as string,",
+						"          ProjectKey as string",
+						"     ),",
+						"     errors: true) ~> cast6",
+						"cast4, cast3 union(byName: true)~> union2",
+						"cast1, cast5 union(byName: true)~> union3",
+						"union2, cast2 union(byName: true)~> union4",
+						"union4, union3 union(byName: true)~> union5",
+						"union5, cast6 union(byName: true)~> union6",
+						"flatten8 unpivot(output(",
+						"          unpivot as double,",
+						"          new as double",
+						"     ),",
+						"     ungroupBy(id),",
+						"     lateral: true,",
+						"     ignoreNullPivots: false) ~> unpivot15",
+						"unpivot15 aggregate(groupBy(unpivot),",
+						"     each(match(name!=\"unpivot\"), $$ = first($$))) ~> aggregate15",
+						"union6 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     partitionFileNames:['velocity.parquet'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink7"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Bug_V1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "web_1_read The Jira RestApi",
+						"description": "To Know Total No_Of_Records present in RestApi",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@pipeline().parameters.JiraRestApi",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "Basic",
+								"username": {
+									"value": "@pipeline().parameters.UserName",
+									"type": "Expression"
+								},
+								"password": {
+									"type": "SecureString",
+									"value": "**********"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set1_to store Total  Value",
+						"description": "storing the total number of record's value ",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "web_1_read The Jira RestApi",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Var1_Total_No_Of_RecordsValue",
+							"value": {
+								"value": "@string(activity('web_1_read The Jira RestApi').output.total)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set 2 is contains divided value",
+						"description": "divide the number of total record's / (by) 100.",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set1_to store Total  Value",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Var2_Divde_Total_No_Of_Records",
+							"value": {
+								"value": "@string(div(add(int(variables('Var1_Total_No_Of_RecordsValue')),99), 100))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach for jira to blob",
+						"description": "going to loop throw the inner activity's based on the total record's divided value",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Set 2 is contains divided value",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@range(0,int(variables('Var2_Divde_Total_No_Of_Records')))",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set 3 for store the first part of jira restapi",
+									"description": "this activity is used to store the first part of jirs's restapi",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var3_1st_Part_Of_Jiras_RestApi",
+										"value": {
+											"value": "@pipeline().parameters.set_3",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 5 for update the startAt value",
+									"description": "this activity is used to store the updated value for startAt",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 4 for store startAt value for jira RestApi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var4_Dynamic_StartAt_Value",
+										"value": {
+											"value": "@string(add(mul(item(),100),int(variables('Var5_Initial_StartAt_Value'))))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 6 store the last part of jira RestApi",
+									"description": "this activity is used to store the last part of jira's RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 5 for update the startAt value",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var6_LastPart_Of_Jiras_restApi",
+										"value": {
+											"value": "@pipeline().parameters.set_6",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 7 contain valid jira restapi",
+									"description": "this activity is used to concat all the part of RestApi and make it as a one valid RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 6 store the last part of jira RestApi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var7_Complete_Jira_Rest_Api",
+										"value": {
+											"value": "@concat(variables('Var3_1st_Part_Of_Jiras_RestApi'),variables('Var4_Dynamic_StartAt_Value'),variables('Var6_LastPart_Of_Jiras_restApi'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 4 for store startAt value for jira RestApi",
+									"description": "this activity is used to store the startAt value for jira's RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 3 for store the first part of jira restapi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var5_Initial_StartAt_Value",
+										"value": {
+											"value": "@string(int(0))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web2 get data from RestApi",
+									"description": "to getting the data from RestApi Sequentially",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set 7 contain valid jira restapi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('Var7_Complete_Jira_Rest_Api')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"authentication": {
+											"type": "Basic",
+											"username": {
+												"value": "@pipeline().parameters.UserName",
+												"type": "Expression"
+											},
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "Set 8 to store 1st part of blob restapi",
+									"description": "this activity is used to store 1'st part of blob's RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Web2 get data from RestApi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var8_1st_Part_Of_Blobs_RestApi",
+										"value": {
+											"value": "@pipeline().parameters.set_8",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 9 to store static perfix filename",
+									"description": "to store static prefix filename for each and every jira's rest api",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 8 to store 1st part of blob restapi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var9_Static_Prefix_FileName",
+										"value": {
+											"value": "@pipeline().parameters.set_9",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 10 to store dynamic suffix filename",
+									"description": "is used to store the suffix filename for jira's RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 9 to store static perfix filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var10_Dynamic_Suffix_FileName",
+										"value": {
+											"value": "@concat(string(int(item())),'.json')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 11 contains valid destination filename",
+									"description": "this activity is used to concat the prefix and suffix filename",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 10 to store dynamic suffix filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var11_Complete_Sink_Filename",
+										"value": {
+											"value": "@concat(variables('Var9_Static_Prefix_FileName'),variables('Var10_Dynamic_Suffix_FileName'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 12 store last part of blob AestApi",
+									"description": "store the the last part of blob AestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 11 contains valid destination filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var12_2nd_Part_Of_Blobs_RestApi",
+										"value": {
+											"value": "@pipeline().parameters.set_12",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set 13 contains blobs complete restapi",
+									"description": "contain one valid blob restapi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set 12 store last part of blob AestApi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var13_Complete_Blob_Rest_Api",
+										"value": {
+											"value": "@concat(variables('Var8_1st_Part_Of_Blobs_RestApi'),variables('Var11_Complete_Sink_Filename'),variables('Var12_2nd_Part_Of_Blobs_RestApi'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web3 to load the data into blob storage acc",
+									"description": "this activity is used to store the data the data which is given by jira's RestApi.",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set 13 contains blobs complete restapi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('Var13_Complete_Blob_Rest_Api')",
+											"type": "Expression"
+										},
+										"method": "PUT",
+										"headers": {
+											"x-ms-blob-type": {
+												"value": "@pipeline().parameters.Header_Value",
+												"type": "Expression"
+											}
+										},
+										"body": {
+											"value": "@activity('Web2 get data from RestApi').output",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "To Get Filenames",
+						"description": "getting the Source Filename For DataFlow",
+						"type": "GetMetadata",
+						"dependsOn": [
+							{
+								"activity": "ForEach for jira to blob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_Bug_V1_Sourcefile",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach Loop Throw The Dataflow",
+						"description": "loop throw the Dataflow for clean the json raw data",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "To Get Filenames",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('To Get Filenames').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set_1_scr_Filename",
+									"description": "used to store the source filename for dataflow source",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var14_Scr_Filename_For_DF",
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_2_Sink Filename",
+									"description": "used to store the sink filename for dataflow for destination ",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_1_scr_Filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Var15_Sink_Filename_For_DF",
+										"value": {
+											"value": "@replace(variables('Var14_Scr_Filename_For_DF'),'.json','.csv')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Data flow1",
+									"description": "to clean the data dynamically",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [
+										{
+											"activity": "Set_2_Sink Filename",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "DF_Bug_V1_copy1",
+											"type": "DataFlowReference",
+											"parameters": {
+												"sink_Filename": {
+													"value": "'@{variables('Var15_Sink_Filename_For_DF')}'",
+													"type": "Expression"
+												}
+											},
+											"datasetParameters": {
+												"source1": {
+													"scr_Filename": {
+														"value": "@variables('Var14_Scr_Filename_For_DF')",
+														"type": "Expression"
+													}
+												},
+												"sink1": {}
+											}
+										},
+										"staging": {},
+										"compute": {
+											"coreCount": 8,
+											"computeType": "General"
+										},
+										"traceLevel": "Fine"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "merge the cleand csv format data files",
+						"description": "merge cleaned data files and make it one single file",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "ForEach Loop Throw The Dataflow",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false,
+									"prefix": {
+										"value": "@{pipeline().parameters.Prefix_Filename}",
+										"type": "Expression"
+									}
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Bug_V1_Merge_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Bug_V1_Sink_Merge",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"UserName": {
+						"type": "string",
+						"defaultValue": "rama.veluri@global-csg.com"
+					},
+					"JiraRestApi": {
+						"type": "string",
+						"defaultValue": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt=0&maxResults=100"
+					},
+					"set_3": {
+						"type": "string",
+						"defaultValue": "https://safefleet.atlassian.net/rest/api/latest/search?jql=project%20IN(%22VMM%22,%22DESM%22,%22RE%22,%22FMA%22,%22VMN%22,%22EVM%22)%20%20AND%20created%20%3E=%20%222022/01/01%2000:01%22%20AND%20created%20%3C=%20now()&startAt="
+					},
+					"set_6": {
+						"type": "string",
+						"defaultValue": "&maxResults=100"
+					},
+					"set_8": {
+						"type": "string",
+						"defaultValue": "https://databistrg.blob.core.windows.net/monthlymetrics/BugV1/"
+					},
+					"set_9": {
+						"type": "string",
+						"defaultValue": "Bug_"
+					},
+					"set_12": {
+						"type": "string",
+						"defaultValue": "?sp=racw&st=2023-06-04T05:04:42Z&se=2030-05-10T13:04:42Z&spr=https&sv=2022-11-02&sr=c&sig=H0immbI7Gh4mRhibMr%2BAcA9ubWSRcdh4yb%2Fw2FJJ%2Fr4%3D"
+					},
+					"Header_Value": {
+						"type": "string",
+						"defaultValue": "BlockBlob"
+					},
+					"Prefix_Filename": {
+						"type": "string",
+						"defaultValue": "Bug_V1_staging/Bug"
+					}
+				},
+				"variables": {
+					"Var1_Total_No_Of_RecordsValue": {
+						"type": "String"
+					},
+					"Var2_Divde_Total_No_Of_Records": {
+						"type": "String"
+					},
+					"Var3_1st_Part_Of_Jiras_RestApi": {
+						"type": "String"
+					},
+					"Var4_Dynamic_StartAt_Value": {
+						"type": "String"
+					},
+					"Var6_LastPart_Of_Jiras_restApi": {
+						"type": "String"
+					},
+					"Var7_Complete_Jira_Rest_Api": {
+						"type": "String"
+					},
+					"Var5_Initial_StartAt_Value": {
+						"type": "String"
+					},
+					"Var8_1st_Part_Of_Blobs_RestApi": {
+						"type": "String"
+					},
+					"Var9_Static_Prefix_FileName": {
+						"type": "String"
+					},
+					"Var10_Dynamic_Suffix_FileName": {
+						"type": "String"
+					},
+					"Var11_Complete_Sink_Filename": {
+						"type": "String"
+					},
+					"Var12_2nd_Part_Of_Blobs_RestApi": {
+						"type": "String"
+					},
+					"Var13_Complete_Blob_Rest_Api": {
+						"type": "String"
+					},
+					"Var14_Scr_Filename_For_DF": {
+						"type": "String"
+					},
+					"Var15_Sink_Filename_For_DF": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-01T09:32:41Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Issuetype_History_Blob_SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Issuetype_History_Parquet_Csv_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Issuetype_History_Parquet_Csv_Output",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Issuetype_History_Csv_SQLDB_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Issuetype_History_Csv_SQLDB_Output",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-07T05:56:17Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Issuetype_history_Jira_to_Blob')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@pipeline().parameters.Query",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_IssueType_History_Lookup",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Web1",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@item().RestApi",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"authentication": {
+											"type": "Basic",
+											"username": {
+												"value": "@pipeline().parameters.UserName",
+												"type": "Expression"
+											},
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "Web2",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Web1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@item().blobRestApi",
+											"type": "Expression"
+										},
+										"method": "PUT",
+										"headers": {
+											"x-ms-blob-type": {
+												"value": "@pipeline().parameters.Header_Value",
+												"type": "Expression"
+											}
+										},
+										"body": {
+											"value": "@activity('Web1').output",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Query": {
+						"type": "string",
+						"defaultValue": "select * from(    select rank () over( order by [key])  as RN, [Key] as IssueKey,'IssueHistory_'+ [Key] +'.json' as IssueFileName,'https://safefleet.atlassian.net/rest/api/3/issue/'+[Key]+'/changelog' as RestApi ,  'https://databistrg.blob.core.windows.net/test/'+'IssueHistory_'+ [Key] +'.json'+'?sp=racw&st=2023-06-29T06:17:16Z&se=2025-05-15T14:17:16Z&spr=https&sv=2022-11-02&sr=c&sig=%2B7kryfFPMVsgx4FvFpZ%2BRkMZ0Y9Q7ob9MfsTS745CP8%3D' as BlobRestApi, 'IssueHistory_'+ [Key] +'.csv' as IssueType_Sink_FileName   from Bug where Resolution_Date>='2023-01-01' and Resolution_Date<='2023-06-30' and Issue_Name in ('bug','improvement','story')    ) as A where RN >= 1 AND RN <= 10"
+					},
+					"UserName": {
+						"type": "string",
+						"defaultValue": "rama.veluri@global-csg.com"
+					},
+					"Header_Value": {
+						"type": "string",
+						"defaultValue": "BlockBlob"
+					}
+				},
+				"variables": {
+					"new": {
+						"type": "String"
+					},
+					"jsonfilename": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-20T03:14:57Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Issuetype_history_df')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Data flow1",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "DF_Issuetype_History",
+											"type": "DataFlowReference",
+											"parameters": {
+												"sink_filename": {
+													"value": "'@{item().IssueType_Sink_FileName}'",
+													"type": "Expression"
+												}
+											},
+											"datasetParameters": {
+												"source1": {
+													"scr_filename": {
+														"value": "@item().IssueFileName",
+														"type": "Expression"
+													}
+												},
+												"sink1": {}
+											}
+										},
+										"staging": {},
+										"compute": {
+											"coreCount": 8,
+											"computeType": "General"
+										},
+										"traceLevel": "Fine"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@pipeline().parameters.Query",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_Issuetype_History_top_100",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false,
+									"prefix": {
+										"value": "@{pipeline().parameters.Prefix_FileName}",
+										"type": "Expression"
+									}
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Issuetype_History_Merge_CSV_Files",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Issuetype_histaory_final_Parquet_File",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Query": {
+						"type": "string",
+						"defaultValue": "select * from(    select rank () over( order by [key])  as RN, [Key] as IssueKey,'IssueHistory_'+ [Key] +'.json' as IssueFileName,'https://safefleet.atlassian.net/rest/api/3/issue/'+[Key]+'/changelog' as RestApi ,  'https://databistrg.blob.core.windows.net/test/'+'IssueHistory_'+ [Key] +'.json'+'?sp=racw&st=2023-06-29T06:17:16Z&se=2025-05-15T14:17:16Z&spr=https&sv=2022-11-02&sr=c&sig=%2B7kryfFPMVsgx4FvFpZ%2BRkMZ0Y9Q7ob9MfsTS745CP8%3D' as BlobRestApi, 'IssueHistory_'+ [Key] +'.csv' as IssueType_Sink_FileName   from Bug where Resolution_Date>='2023-01-01' and Resolution_Date<='2023-06-30' and Issue_Name in ('bug','improvement','story')    ) as A where RN >= 801 AND RN <= 1000"
+					},
+					"Prefix_FileName": {
+						"type": "string",
+						"defaultValue": "output/IssueHistory"
+					}
+				},
+				"variables": {
+					"jsonfilename": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Issuetype_History"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-11T09:15:57Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Issuetype_History')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Project')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"description": "It Contains RestAPi and FileName for project ",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_Project_LookUP",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"description": "to get jira's raw data and store into blob storage",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set_1_Jira_Api",
+									"description": "contains Jira RestApi",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "RestApi_Jira",
+										"value": {
+											"value": "@item().RestApi",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web1",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set_1_Jira_Api",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('RestApi_Jira')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"authentication": {
+											"type": "Basic",
+											"username": "rama.veluri@global-csg.com",
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "Set_2_Blob_1",
+									"description": "Blob RestApi Part1",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Web1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "RestApi_Blob_1",
+										"value": {
+											"value": "@pipeline().parameters.set_2",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_3_Blob_2",
+									"description": "contains sink Dynamic filename ",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_2_Blob_1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "RestApi_Blob_2",
+										"value": {
+											"value": "@item().FileName",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_4_Blob_3",
+									"description": "Blob restapi last part",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_3_Blob_2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "RestApi_Blob_3",
+										"value": {
+											"value": "@pipeline().parameters.set_4",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_5_Blob_RestApi",
+									"description": "contains complete blob RestApi",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_4_Blob_3",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Final_RestApi_Blob",
+										"value": {
+											"value": "@concat(variables('RestApi_Blob_1'),variables('RestApi_Blob_2'),variables('RestApi_Blob_3'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web2",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set_5_Blob_RestApi",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('Final_RestApi_Blob')",
+											"type": "Expression"
+										},
+										"method": "PUT",
+										"headers": {
+											"x-ms-blob-type": {
+												"value": "@pipeline().parameters.Header_Value",
+												"type": "Expression"
+											}
+										},
+										"body": {
+											"value": "@activity('Web1').output",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Data flow1",
+						"description": "to run Project Dataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Project",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"set_2": {
+						"type": "string",
+						"defaultValue": "https://databistrg.blob.core.windows.net/monthlymetrics/Project/"
+					},
+					"set_4": {
+						"type": "string",
+						"defaultValue": "?sp=racw&st=2023-06-04T05:04:42Z&se=2030-05-10T13:04:42Z&spr=https&sv=2022-11-02&sr=c&sig=H0immbI7Gh4mRhibMr%2BAcA9ubWSRcdh4yb%2Fw2FJJ%2Fr4%3D"
+					},
+					"Header_Value": {
+						"type": "string",
+						"defaultValue": "BlockBlob"
+					}
+				},
+				"variables": {
+					"RestApi_Jira": {
+						"type": "String"
+					},
+					"RestApi_Blob_1": {
+						"type": "String"
+					},
+					"RestApi_Blob_2": {
+						"type": "String"
+					},
+					"RestApi_Blob_3": {
+						"type": "String"
+					},
+					"Final_RestApi_Blob": {
+						"type": "String"
+					},
+					"Velocity_restApi": {
+						"type": "String"
+					},
+					"Blob_RestApi_1": {
+						"type": "String"
+					},
+					"Blob_RestApi_2": {
+						"type": "String"
+					},
+					"Blob_RestApi_3": {
+						"type": "String"
+					},
+					"Final_Blob_RestApi": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Project"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-17T09:39:31Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Project')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_SQLDB_Bug')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Convert The Parquet To Csv Format",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Bug_Parquet_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Bug_Parquet_TO_Csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Transfer Bug Data Into SqlDB",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Convert The Parquet To Csv Format",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Input_Bug_SQLDB",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_bug_SQLDB_Sink_V1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Bug"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-12T09:22:12Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_SQLDB_Project')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "convert Parquet Into Csv",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Project_Parquet_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Project_Parquet_TO_Csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Transfer Project Data Into SQLDB",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "convert Parquet Into Csv",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Project_Csv_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Project_SQLDB",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Project"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-04T12:27:50Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_SQLDB_Velocity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Convert Parquet TO Csv",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Velocity_input_Parquet",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Velocity_Output_Parquet_TO_Csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Transfer Velocity Data Into SQLDB",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Convert Parquet TO Csv",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_Velocity_Csv_Source",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_Velocity_SQLDB",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Velocity"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-04T12:27:50Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Velocity')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"description": "It Contains RestAPi and FileName for velocity",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_Velocity_LookUp",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"description": "to get jira's raw data and store into blob storage",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set_1_Jira_Api",
+									"description": "contains Dynamic Jira RestApi",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Velocity_restApi",
+										"value": {
+											"value": "@item().RestApi",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web1",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set_1_Jira_Api",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('Velocity_restApi')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"authentication": {
+											"type": "Basic",
+											"username": {
+												"value": "@pipeline().parameters.User_Name",
+												"type": "Expression"
+											},
+											"password": {
+												"type": "SecureString",
+												"value": "**********"
+											}
+										}
+									}
+								},
+								{
+									"name": "Set_2_Blob_Part_1",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Web1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Blob_RestApi_1",
+										"value": {
+											"value": "@pipeline().parameters.set_2",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_3_Blob_Part_2",
+									"description": "Contains Dynamic Sink Filename",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_2_Blob_Part_1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Blob_RestApi_2",
+										"value": {
+											"value": "@item().FileName",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_4_Blob_Part_3",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_3_Blob_Part_2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Blob_RestApi_3",
+										"value": {
+											"value": "@pipeline().parameters.set_4",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Set_4_Blob_full_Api",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set_4_Blob_Part_3",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Final_Blob_RestApi",
+										"value": {
+											"value": "@concat(variables('Blob_RestApi_1'),variables('Blob_RestApi_2'),variables('Blob_RestApi_3'))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Web2",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Set_4_Blob_full_Api",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@variables('Final_Blob_RestApi')",
+											"type": "Expression"
+										},
+										"method": "PUT",
+										"headers": {
+											"x-ms-blob-type": {
+												"value": "@pipeline().parameters.Header_Value",
+												"type": "Expression"
+											}
+										},
+										"body": {
+											"value": "@activity('Web1').output",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Data flow1",
+						"description": "to run velocity Dataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Velocity",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source2": {},
+									"source4": {},
+									"source5": {},
+									"source6": {},
+									"source7": {},
+									"source8": {},
+									"sink7": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"User_Name": {
+						"type": "string",
+						"defaultValue": "rama.veluri@global-csg.com"
+					},
+					"set_2": {
+						"type": "string",
+						"defaultValue": "https://databistrg.blob.core.windows.net/monthlymetrics/Velocity/"
+					},
+					"set_4": {
+						"type": "string",
+						"defaultValue": "?sp=racw&st=2023-06-04T05:04:42Z&se=2030-05-10T13:04:42Z&spr=https&sv=2022-11-02&sr=c&sig=H0immbI7Gh4mRhibMr%2BAcA9ubWSRcdh4yb%2Fw2FJJ%2Fr4%3D"
+					},
+					"Header_Value": {
+						"type": "string",
+						"defaultValue": "BlockBlob"
+					}
+				},
+				"variables": {
+					"Velocity_restApi": {
+						"type": "String"
+					},
+					"Blob_RestApi_1": {
+						"type": "String"
+					},
+					"Blob_RestApi_2": {
+						"type": "String"
+					},
+					"Blob_RestApi_3": {
+						"type": "String"
+					},
+					"Final_Blob_RestApi": {
+						"type": "String"
+					},
+					"RestApi_Velocity": {
+						"type": "String"
+					},
+					"Rest_Blob1": {
+						"type": "String"
+					},
+					"RestApi_Blob2": {
+						"type": "String"
+					},
+					"RestApi_Blob3": {
+						"type": "String"
+					},
+					"RestApi_Concate": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Monthly_Metrics_V1/Velocity"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-07-07T11:55:46Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Velocity')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select count (*) as count from test1 ",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTable1",
+								"type": "DatasetReference",
+								"parameters": {
+									"tablename": "\""
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Lookup2",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select count(1) as count from test2",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "SqlServerTable1",
+								"type": "DatasetReference",
+								"parameters": {
+									"tablename": "\""
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Lookup2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('Lookup1').output.value[0].count,activity('Lookup2').output.value[0].count)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Wait1",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 1
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "total",
+										"value": {
+											"value": "@concat('select * from test1 where id>',string(int(activity('Lookup2').output.value[0].count)))",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "@variables('total')",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "SqlServerSink",
+											"writeBehavior": "insert",
+											"sqlWriterUseTableLock": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "SqlServerTable1",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "\""
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "SqlServerTable1",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "test2"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"total": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-17T08:52:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "On_prime_source",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "PostgreSqlSource",
+								"query": "select * from sourcedata"
+							},
+							"dataset": {
+								"referenceName": "PostgreSql",
+								"type": "DatasetReference",
+								"parameters": {
+									"tablename": "''"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Cloud_sink",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzurePostgreSqlSource",
+								"query": "select * from destination",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzurePostgreSql",
+								"type": "DatasetReference",
+								"parameters": {
+									"tablename": "''"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Cloud_sink",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "On_prime_source",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greater(activity('On_prime_source').output.count,activity('Cloud_sink').output.count)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Wait1",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 1
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Query",
+										"value": {
+											"value": "@concat(concat('select * from sourcedata where id>',string(activity('Cloud_sink').output.count)),' group by id')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "Set variable1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "PostgreSqlSource",
+											"query": {
+												"value": "@variables('Query')",
+												"type": "Expression"
+											}
+										},
+										"sink": {
+											"type": "AzurePostgreSQLSink",
+											"writeBatchSize": 1000000,
+											"writeBatchTimeout": "00:30:00",
+											"writeMethod": "CopyCommand"
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "PostgreSql",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "''"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "AzurePostgreSql",
+											"type": "DatasetReference",
+											"parameters": {
+												"tablename": "destination"
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Query": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-08-22T07:05:00Z"
+			},
+			"dependsOn": []
+		}
+	]
+}
