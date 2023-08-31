@@ -5,24 +5,11 @@
 			{
 				"name": "Wait1",
 				"type": "Wait",
-				"dependsOn": [
-					{
-						"activity": "Append variable1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"waitTimeInSeconds": 1
 				}
-			},
-			{
-				"name": "Append variable1",
-				"type": "AppendVariable",
-				"dependsOn": [],
-				"userProperties": []
 			}
 		],
 		"annotations": []
